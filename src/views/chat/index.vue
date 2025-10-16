@@ -1,10 +1,19 @@
 <template>
-  <div>
+  <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
     <Header />
-    <div class="w-90% mx-auto">
-      <Messages :messages="messages" />
-      <Sender ref="senderRef" :loading="loading" @send="handleSend" />
-    </div>
+    <main class="w-90% mx-auto py-6">
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <!-- Messages Container -->
+        <div class="h-[600px] overflow-y-auto p-6 space-y-4">
+          <Messages :messages="messages" />
+        </div>
+
+        <!-- Sender Component -->
+        <div class="border-t border-gray-100 p-4 bg-gray-50/50">
+          <Sender ref="senderRef" :loading="loading" @send="handleSend" />
+        </div>
+      </div>
+    </main>
     <Footer />
   </div>
 </template>
@@ -15,17 +24,17 @@ import { Sender, Messages } from '@/compoents/common';
 import { chat } from '@/services';
 const loading = ref(false);
 const senderRef = ref<InstanceType<typeof Sender>>();
-const messages = ref([]);
+const messages = ref<Array<{role: 'user' | 'assistant', content: string, type: 'text' | 'image', avatar?: string}>>([]);
 
 const handleSend = async (value: string) => {
   loading.value = true;
-  messages.value.push({ role: 'user', content: value });
+  messages.value.push({ role: 'user', content: value, type: 'text' });
   const res = await chat({
     messages: messages.value,
   });
   loading.value = false;
   if (res) {
-    messages.value.push(res.choices[0].message);
+    messages.value.push({ ...res.choices[0].message, type: 'text' });
     senderRef.value?.clearInput();
   }
 
@@ -33,4 +42,26 @@ const handleSend = async (value: string) => {
 };
 </script>
 
-<style></style>
+<style scoped>
+/* Custom scrollbar styling */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 3px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
+}
+
+.w-90% {
+  width: 90%;
+}
+</style>
