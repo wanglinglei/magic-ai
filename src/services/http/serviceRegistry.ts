@@ -16,6 +16,12 @@ export class ServiceRegistry {
     this.services.set(serviceDefinition.name, serviceDefinition as ServiceDefinition);
   }
 
+  registerServices(services: ServiceDefinition[]): void {
+    services.forEach((service) => {
+      this.registerService(service);
+    });
+  }
+
   // 配置功能-服务映射
   configureFeatureServices(featureConfig: ConfigServiceNameConfig): void {
     let newFeatureServiceMap: FeatureServiceConfig = {};

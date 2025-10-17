@@ -1,5 +1,5 @@
-import type { ServiceDefinition } from '../http/types';
 import { baseFetch } from '../http/baseFetch';
+import { TyBaseService } from '../baseServices/tyBaseService';
 import type {
   ChatServiceDefinition,
   ChatRequestParams,
@@ -7,22 +7,15 @@ import type {
   ChatServiceName,
 } from './types';
 
-export class TyChatService implements ChatServiceDefinition {
+export class TyChatService extends TyBaseService implements ChatServiceDefinition {
   name: ChatServiceName = 'chat_ty';
-  TY_API_KEY = import.meta.env.VITE_TY_API_KEY;
-  TY_API_URL = import.meta.env.VITE_TY_API_URL;
-
-  constructor() {}
 
   async execute(params: ChatRequestParams) {
     const { messages, model = 'qwen-plus' } = params;
     const response = await baseFetch({
       method: 'POST',
-      url: `${this.TY_API_URL}/compatible-mode/v1/chat/completions`,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.TY_API_KEY}`,
-      },
+      url: this.buildApiUrl('/compatible-mode/v1/chat/completions'),
+      headers: this.getCommonHeaders(),
       body: {
         messages,
         model,

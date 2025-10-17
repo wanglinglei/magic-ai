@@ -1,4 +1,5 @@
 import { baseFetch } from '../http/baseFetch';
+import { TyBaseService } from '../baseServices/tyBaseService';
 import type {
   VideoServiceDefinition,
   VideoRequestParams,
@@ -7,22 +8,14 @@ import type {
 } from './types';
 import { waitTask } from '../lib/waitTask';
 
-export class TyVideoService implements VideoServiceDefinition {
+export class TyVideoService extends TyBaseService implements VideoServiceDefinition {
   name: VideoServiceName = 'video_ty';
-  TY_API_KEY = import.meta.env.VITE_TY_API_KEY;
-  TY_API_URL = import.meta.env.VITE_TY_API_URL;
-
-  constructor() {}
 
   async execute(params: VideoRequestParams): Promise<VideoResponse | undefined> {
     const response = await baseFetch({
       method: 'POST',
-      url: `${this.TY_API_URL}/api/v1/services/aigc/video-generation/video-synthesis`,
-      headers: {
-        'Content-Type': 'application/json',
-        'X-DashScope-Async': 'enable',
-        Authorization: `Bearer ${this.TY_API_KEY}`,
-      },
+      url: this.buildApiUrl('/api/v1/services/aigc/video-generation/video-synthesis'),
+      headers: this.getAsyncHeaders(),
       body: {
         prompt: params.prompt,
       },

@@ -1,5 +1,5 @@
-import type { ServiceDefinition } from '../http/types';
 import { baseFetch } from '../http/baseFetch';
+import { GlmBaseService } from '../baseServices/glmBaseService';
 import type {
   ChatServiceDefinition,
   ChatRequestParams,
@@ -7,22 +7,15 @@ import type {
   ChatMessage,
 } from './types';
 
-export class GlmChatService implements ChatServiceDefinition {
+export class GlmChatService extends GlmBaseService implements ChatServiceDefinition {
   name: ChatServiceName = 'chat_glm';
-  GLM_API_KEY = import.meta.env.VITE_GLM_API_KEY;
-  GLM_API_URL = import.meta.env.VITE_GLM_API_URL;
-
-  constructor() {}
 
   async execute(params: ChatRequestParams): Promise<ChatMessage | undefined> {
     const { messages, model = 'glm-4.5' } = params;
     const response = await baseFetch({
       method: 'POST',
-      url: `${this.GLM_API_URL}/api/paas/v4/chat/completions`,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.GLM_API_KEY}`,
-      },
+      url: this.buildApiUrl('/api/paas/v4/chat/completions'),
+      headers: this.getCommonHeaders(),
       body: {
         messages,
         model,

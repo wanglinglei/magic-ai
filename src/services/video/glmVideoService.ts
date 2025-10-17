@@ -1,4 +1,5 @@
 import { baseFetch } from '../http/baseFetch';
+import { GlmBaseService } from '../baseServices/glmBaseService';
 import type {
   VideoServiceDefinition,
   VideoRequestParams,
@@ -7,21 +8,14 @@ import type {
 } from './types';
 import { waitTask } from '../lib/waitTask';
 
-export class GlmVideoService implements VideoServiceDefinition {
+export class GlmVideoService extends GlmBaseService implements VideoServiceDefinition {
   name: VideoServiceName = 'video_glm';
-  GLM_API_KEY = import.meta.env.VITE_GLM_API_KEY;
-  GLM_API_URL = import.meta.env.VITE_GLM_API_URL;
-
-  constructor() {}
 
   async execute(params: VideoRequestParams): Promise<VideoResponse | undefined> {
     const response = await baseFetch({
       method: 'POST',
-      url: `${this.GLM_API_URL}/api/paas/v4/videos/generations`,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.GLM_API_KEY}`,
-      },
+      url: this.buildApiUrl('/api/paas/v4/videos/generations'),
+      headers: this.getCommonHeaders(),
       body: {
         prompt: params.prompt,
       },
