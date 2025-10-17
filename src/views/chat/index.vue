@@ -21,24 +21,24 @@
 <script setup lang="ts">
 import { Header, Footer } from '@/compoents/page';
 import { Sender, Messages } from '@/compoents/common';
-import { chat } from '@/services';
+import { serviceController } from '@/services';
 const loading = ref(false);
 const senderRef = ref<InstanceType<typeof Sender>>();
-const messages = ref<Array<{role: 'user' | 'assistant', content: string, type: 'text' | 'image', avatar?: string}>>([]);
+const messages = ref<
+  Array<{ role: 'user' | 'assistant'; content: string; type: 'text' | 'image'; avatar?: string }>
+>([]);
 
 const handleSend = async (value: string) => {
   loading.value = true;
   messages.value.push({ role: 'user', content: value, type: 'text' });
-  const res = await chat({
+  const res = await serviceController.executeService('chat', 'chat_glm', {
     messages: messages.value,
   });
   loading.value = false;
   if (res) {
-    messages.value.push({ ...res.choices[0].message, type: 'text' });
+    messages.value.push({ ...res.data, type: 'text' });
     senderRef.value?.clearInput();
   }
-
-  console.log('res', res);
 };
 </script>
 

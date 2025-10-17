@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BASE_URL = import.meta.env.VITE_TY_BASE_URL;
 const DASHSCOPE_API_KEY = import.meta.env.VITE_DASHSCOPE_API_KEY;
 import type { BaseRequestParams } from './types';
 
@@ -8,7 +8,6 @@ import type { BaseRequestParams } from './types';
  * @return {*}
  */
 async function waitForTaskCompletion(taskId: string, maxAttempts = 60, delay = 5000) {
-  console.log('taskId', taskId);
   for (let i = 0; i < maxAttempts; i++) {
     const response = await fetch(`${BASE_URL}/api/v1/tasks/${taskId}`, {
       method: 'GET',
