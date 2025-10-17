@@ -1,48 +1,149 @@
-# ai-ali
+# Magic AI - 智能AI助手平台
 
-This template should help get you started developing with Vue 3 in Vite.
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Vue](https://img.shields.io/badge/Vue-3.5+-4FC08D.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9+-3178C6.svg)
 
-## Recommended IDE Setup
+Magic AI 是一个基于现代Web技术栈构建的智能AI助手平台，集成了多种AI服务能力，为用户提供智能对话和视频生成功能。
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## ✨ 核心功能
 
-## Recommended Browser Setup
+### 🤖 智能对话
+- **多模型支持**：集成通义千问和智谱AI两大主流对话模型
+- **实时对话**：支持流畅的实时AI对话体验
+- **上下文理解**：具备完整的对话历史记录和上下文理解能力
+- **灵活切换**：可在不同AI模型间自由切换，体验不同模型的特色能力
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+### 🎬 AI视频生成
+- **文本生成视频**：通过简单的文字描述生成高质量视频内容
+- **多模型引擎**：支持通义千问和智谱的视频生成模型
+- **实时预览**：生成过程中提供实时状态反馈
+- **高质量输出**：生成高质量、符合描述的视频内容
 
-## Type Support for `.vue` Imports in TS
+### 🎨 现代化界面
+- **响应式设计**：完美适配桌面端和移动端设备
+- **优雅交互**：流畅的动画效果和用户友好的交互体验
+- **主题统一**：采用现代化的紫色主题设计，视觉效果出色
+- **直观操作**：简洁明了的用户界面，易于上手
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## 🏗️ 技术架构
 
-## Customize configuration
+### 前端技术栈
+- **Vue 3.5+**：采用最新的Vue 3 Composition API
+- **TypeScript 5.9+**：提供完整的类型安全保障
+- **Vite 7.1+**：极速的开发构建工具
+- **UnoCSS**：高性能的原子化CSS框架
+- **Pinia**：轻量级状态管理方案
+- **Vue Router 4.5+**：单页应用路由管理
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### 服务架构
+- **模块化设计**：采用插件化的服务注册和执行机制
+- **统一服务接口**：通过ServiceController统一管理所有AI服务
+- **可扩展架构**：支持轻松添加新的AI服务提供商
+- **错误处理**：完善的错误处理和降级机制
 
-## Project Setup
+## 📁 项目结构
 
-```sh
-pnpm install
+```
+src/
+├── views/                 # 页面视图
+│   ├── home/             # 首页
+│   ├── chat/             # 智能对话页面
+│   └── video/            # 视频生成页面
+├── services/             # AI服务层
+│   ├── chat/             # 对话服务
+│   ├── video/            # 视频服务
+│   └── http/             # HTTP服务基础设施
+├── components/           # 公共组件
+│   ├── common/           # 通用组件
+│   └── page/             # 页面组件
+└── lib/                  # 工具库
 ```
 
-### Compile and Hot-Reload for Development
+## 🚀 核心特性
 
-```sh
-pnpm dev
+### 服务管理系统
+- **服务注册机制**：通过ServiceRegistry管理所有AI服务
+- **动态执行**：ServiceExecutor支持动态调用不同的AI服务
+- **配置化管理**：通过配置文件统一管理服务选项
+
+### 组件化设计
+- **消息组件**：支持文本、图片、视频等多种消息类型
+- **发送器组件**：统一的输入和发送体验
+- **选择器组件**：灵活的模型选择界面
+
+## 🎯 使用场景
+
+### 个人用户
+- **内容创作**：通过AI对话获取灵感，生成视频内容
+- **学习助手**：利用AI对话进行知识学习和问答
+- **创意表达**：将创意想法转化为视频作品
+
+### 开发者
+- **API集成**：了解如何集成多种AI服务
+- **架构参考**：学习现代化的前端架构设计
+- **技术实践**：Vue 3 + TypeScript的最佳实践
+
+## 🛠️ 快速开始
+
+### 环境要求
+- Node.js 20.19.0+ 或 22.12.0+
+- npm 或 yarn 包管理器
+
+### 安装依赖
+```bash
+npm install
 ```
 
-### Type-Check, Compile and Minify for Production
-
-```sh
-pnpm build
+### 开发模式
+```bash
+npm run dev
 ```
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-pnpm lint
+### 构建生产版本
+```bash
+npm run build
 ```
+
+### 代码检查
+```bash
+npm run lint
+```
+
+### 类型检查
+```bash
+npm run type-check
+```
+
+## 🔧 配置说明
+
+### AI服务配置
+项目支持多种AI服务的配置，包括：
+- **通义千问**：阿里云提供的对话和视频生成服务
+- **智谱AI**：智谱AI提供的大语言模型服务
+
+### 服务扩展
+添加新的AI服务只需：
+1. 创建对应的服务类
+2. 实现统一的服务接口
+3. 在ServiceRegistry中注册服务
+4. 更新配置文件
+
+## 📊 性能特点
+
+- **快速响应**：采用异步处理，确保界面响应流畅
+- **资源优化**：按需加载，减少不必要的资源消耗
+- **缓存机制**：合理的数据缓存策略
+- **错误恢复**：完善的错误处理和自动重试机制
+
+## 🤝 贡献指南
+
+欢迎提交Issue和Pull Request来改进项目！
+
+## 📄 开源协议
+
+本项目采用 MIT 开源协议。
+
+---
+
+**Magic AI** - 让AI技术赋能创意，让智能触手可及！
