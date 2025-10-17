@@ -1,3 +1,10 @@
+/*
+ * @Author: wanglinglei
+ * @Date: 2025-10-17 10:10:35
+ * @Description: 基础请求方法
+ * @FilePath: /ai-ali/src/services/http/baseFetch.ts
+ * @LastEditTime: 2025-10-17 13:59:10
+ */
 export interface BaseRequestParams {
   method: 'POST' | 'GET';
   url: string;
