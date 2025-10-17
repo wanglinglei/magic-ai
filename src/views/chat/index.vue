@@ -10,7 +10,15 @@
 
         <!-- Sender Component -->
         <div class="border-t border-gray-100 p-4 bg-gray-50/50">
-          <Sender ref="senderRef" :loading="loading" @send="handleSend" />
+          <Sender ref="senderRef" :loading="loading" @send="handleSend">
+            <template #senderHeader>
+              <SelectOption
+                :options="chatServiceNameConfig.chat"
+                title="模型"
+                v-model:value="selectedModel"
+              />
+            </template>
+          </Sender>
         </div>
       </div>
     </main>
@@ -20,14 +28,15 @@
 
 <script setup lang="ts">
 import { Header, Footer } from '@/compoents/page';
-import { Sender, Messages } from '@/compoents/common';
+import { Sender, Messages, SelectOption } from '@/compoents/common';
 import { serviceController } from '@/services';
+import { chatServiceNameConfig } from '@/services/chat/index';
 const loading = ref(false);
 const senderRef = ref<InstanceType<typeof Sender>>();
 const messages = ref<
   Array<{ role: 'user' | 'assistant'; content: string; type: 'text' | 'image'; avatar?: string }>
 >([]);
-
+const selectedModel = ref('chat_glm');
 const handleSend = async (value: string) => {
   loading.value = true;
   messages.value.push({ role: 'user', content: value, type: 'text' });

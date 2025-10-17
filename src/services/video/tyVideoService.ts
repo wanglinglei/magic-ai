@@ -12,12 +12,17 @@ export class TyVideoService extends TyBaseService implements VideoServiceDefinit
   name: VideoServiceName = 'video_ty';
 
   async execute(params: VideoRequestParams): Promise<VideoResponse | undefined> {
+    const { prompt } = params;
     const response = await baseFetch({
       method: 'POST',
       url: this.buildApiUrl('/api/v1/services/aigc/video-generation/video-synthesis'),
       headers: this.getAsyncHeaders(),
       body: {
-        prompt: params.prompt,
+        model: 'wan2.5-t2v-preview',
+        input: {
+          prompt,
+        },
+        parameters: {},
       },
     });
     if (response?.output?.task_id) {
@@ -25,6 +30,7 @@ export class TyVideoService extends TyBaseService implements VideoServiceDefinit
         taskId: response.output.task_id,
         sign: 'ty',
         checkTaskCompleted: (result) => result.output?.task_status === 'SUCCEEDED',
+        checkTaskFailed: (result) => result.output?.task_status === 'FAILED',
       });
       if (taskResponse?.output?.video_url) {
         return {

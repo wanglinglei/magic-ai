@@ -49,4 +49,14 @@ export class ServiceRegistry {
   getAllServices(): string[] {
     return Array.from(this.services.keys());
   }
+
+  // 根据功能获取对应的服务列表
+  getServicesByFeature(feature: string): string[] {
+    return this.featureServiceMap[feature] || [];
+  }
+
+  // 获取所有功能-服务映射
+  getFeatureServiceMap(): FeatureServiceConfig {
+    return { ...this.featureServiceMap };
+  }
 }

@@ -9,7 +9,7 @@ interface WaitTaskParams {
 
 const requestMap = {
   glm: {
-    url: `${import.meta.env.VITE_GLM_API_URL}/api/paas/v4/async-result`,
+    url: `${import.meta.env.VITE_GLM_API_URL}/api/paas/v4/async-result/`,
     headers: {
       Authorization: `Bearer ${import.meta.env.VITE_GLM_API_KEY}`,
     },

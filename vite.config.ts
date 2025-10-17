@@ -26,6 +26,13 @@ export default defineConfig({
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     },
+
+    proxy: {
+      'https://dashscope.aliyuncs.com': {
+        target: 'https://dashscope.aliyuncs.com',
+        changeOrigin: true,
+      },
+    },
   },
   resolve: {
     alias: {

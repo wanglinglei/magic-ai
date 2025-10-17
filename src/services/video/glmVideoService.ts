@@ -18,11 +18,12 @@ export class GlmVideoService extends GlmBaseService implements VideoServiceDefin
       headers: this.getCommonHeaders(),
       body: {
         prompt: params.prompt,
+        model: 'CogVideoX-Flash',
       },
     });
-    if (response?.output?.task_id) {
+    if (response?.id) {
       const taskResponse = await waitTask({
-        taskId: response.output.task_id,
+        taskId: response.id,
         sign: 'glm',
         checkTaskCompleted: (result) => !!result.video_result?.[0]?.url,
       });

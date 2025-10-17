@@ -2,7 +2,7 @@
   <div>
     <div v-for="item in messages" :key="item.content">
       <UserMessge v-if="item.role === 'user'" :content="item.content" />
-      <ResponseMessage v-if="item.role === 'assistant'" :content="item.content" />
+      <ResponseMessage :type="item.type" v-if="item.role === 'assistant'" :content="item.content" />
     </div>
   </div>
 </template>
@@ -30,7 +30,7 @@ const {
   messages: {
     role: 'user' | 'assistant';
     content: string;
-    type: 'text' | 'image';
+    type: 'text' | 'image' | 'video';
     avatar?: string;
   }[];
 }>();
