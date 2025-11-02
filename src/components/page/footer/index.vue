@@ -4,14 +4,7 @@
       <!-- 上半部分：Logo 和社交媒体 -->
       <div class="flex justify-between items-center mb-8">
         <!-- Logo 区域 -->
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-black dark:bg-white rounded-lg flex items-center justify-center">
-            <img class="w-60px h-60px rounded-10px" :src="logoPng" alt="logo" />
-          </div>
-          <span class="ml-16px text-xl font-semibold text-gray-900 dark:text-white">
-            {{ COMPANY_INFO.name }}
-          </span>
-        </div>
+        <Logo />
 
         <!-- 社交媒体图标 -->
         <div class="flex gap-4">
@@ -76,6 +69,7 @@
 <script setup lang="ts">
 import { COMPANY_INFO, NAV_LINKS, SECONDARY_LINKS, SOCIAL_LINKS } from './constants';
 import logoPng from '@/assets/images/logo/logo1.png';
+import Logo from '../logo/index.vue';
 </script>
 
 <style scoped>

@@ -1,12 +1,6 @@
 <template>
   <div class="w-80% mx-auto flex justify-between items-center p-y-20px">
-    <div class="left-logo flex justify-start items-center">
-      <img class="w-60px h-60px rounded-10px" :src="logoPng" alt="logo" />
-      <div class="ml-16px">
-        <div class="text-24px font-bold">{{ APP_INFO.name }}</div>
-        <div class="text-16px text-gray-500">{{ APP_INFO.description }}</div>
-      </div>
-    </div>
+    <Logo />
     <div class="center-menu"></div>
     <div class="right-user">
       <div v-if="user">
@@ -36,6 +30,7 @@
 
 <script setup lang="ts">
 import logoPng from '@/assets/images/logo/logo1.png';
+import Logo from '../logo/index.vue';
 import { ElButton } from 'element-plus';
 import { User, UserFilled } from '@element-plus/icons';
 import { useUserStore } from '@/stores';

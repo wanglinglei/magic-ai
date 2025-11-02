@@ -13,7 +13,9 @@
           >
             <img :src="item.image" class="w-40px h-40px object-contain" :alt="item.title" />
           </div>
-          <div class="text-20px font-bold text-gray-800 mb-3">{{ item.title }}</div>
+          <div class="text-20px font-bold text-gray-800 mb-3">
+            <GradientText :text="item.title" />
+          </div>
           <div class="text-14px text-gray-500 mb-6 text-center">{{ item.description }}</div>
           <div class="flex gap-2 flex-wrap justify-center">
             <div
@@ -32,8 +34,9 @@
 
 <script setup lang="ts">
 import { PageContainer } from '@/components/page';
-import SplashCursor from '@/components/splashCursor/index.vue';
+import { SplashCursor, GradientText, GlitchText } from '@/components/animationComponents';
 import { HOME_BANNER_LIST } from './constants';
+import { APP_INFO } from '@/components/page/header/constants';
 </script>
 
 <style scoped>
