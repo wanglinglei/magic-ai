@@ -1,27 +1,31 @@
 <template>
-  <div>
-    <h1>Chat</h1>
-    <main class="w-70% mx-auto">
-      <BubbleList :list="list" max-height="350px" />
-      <Sender
-        v-model="senderValue"
-        variant="updown"
-        clearable
-        allow-speech
-        @submit="handleSubmit"
-      />
+  <div class="h-100vh">
+    <Header />
+    <main class="w-70% mx-auto relative h-full">
+      <Messages :messages="list" />
+
+      <div class="absolute bottom-200px left-0 w-full">
+        <Sender
+          v-model="senderValue"
+          variant="updown"
+          clearable
+          allow-speech
+          @submit="handleSubmit"
+        />
+      </div>
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { BubbleList, Sender } from 'vue-element-plus-x';
+import { Sender } from 'vue-element-plus-x';
 import type { Message } from '@/services/chat/types';
 import { ChatService } from '@/services/chat';
 import { MessageRole, type TMessageRole } from '@/constants';
-
-const list = ref<Array<Message & { placement: string }>>([]);
+import Messages from '@/components/message/index.vue';
+import { Header, Footer, PageContainer } from '@/components/page';
+const list = ref<Message[]>([]);
 const senderValue = ref('');
 const handleSubmit = async (value: string) => {
   console.log(value);
@@ -29,7 +33,6 @@ const handleSubmit = async (value: string) => {
   const message = {
     role: MessageRole.USER,
     content: value,
-    placement: 'end',
   };
   list.value.push(message);
   const res = await ChatService.sendMessage({
@@ -43,7 +46,6 @@ const handleSubmit = async (value: string) => {
     list.value.push({
       role: MessageRole.ASSISTANT,
       content: res.data.content,
-      placement: 'start',
     });
   }
 };
