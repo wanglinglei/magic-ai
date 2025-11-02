@@ -1,0 +1,44 @@
+import chatPng from '@/assets/images/home/chat.png';
+import imagePng from '@/assets/images/home/image.png';
+import videoPng from '@/assets/images/home/video.png';
+
+export const HOME_BANNER_LIST = [
+  {
+    title: '图像生成',
+    description: 'AI 绘画、图片生成、图像编辑工具',
+    image: imagePng,
+    labels: [
+      { text: '推荐', colorClass: 'bg-blue-100 text-blue-700' },
+      { text: '热门', colorClass: 'bg-emerald-100 text-emerald-700' },
+      { text: '图像', colorClass: 'bg-pink-100 text-pink-700' },
+    ],
+  },
+  {
+    title: '提示词优化器',
+    description: '智能AI提示词优化工具',
+    image: chatPng,
+    labels: [
+      { text: '推荐', colorClass: 'bg-indigo-100 text-indigo-700' },
+      { text: '提示词', colorClass: 'bg-cyan-100 text-cyan-700' },
+      { text: '通用', colorClass: 'bg-violet-100 text-violet-700' },
+    ],
+  },
+  {
+    title: '设计工具',
+    description: 'AI 设计工具',
+    image: videoPng,
+    labels: [
+      { text: '热门', colorClass: 'bg-sky-100 text-sky-700' },
+      { text: '设计', colorClass: 'bg-teal-100 text-teal-700' },
+    ],
+  },
+  {
+    title: '代码生成',
+    description: 'AI 代码生成工具',
+    image: chatPng,
+    labels: [
+      { text: '新功能', colorClass: 'bg-purple-100 text-purple-700' },
+      { text: '编程', colorClass: 'bg-green-100 text-green-700' },
+    ],
+  },
+];

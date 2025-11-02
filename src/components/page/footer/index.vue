@@ -1,6 +1,6 @@
 <template>
   <footer class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
-    <div class="max-w-7xl mx-auto px-6 py-12">
+    <div class="max-w-80% mx-auto px-6 py-12">
       <!-- 上半部分：Logo 和社交媒体 -->
       <div class="flex justify-between items-center mb-8">
         <!-- Logo 区域 -->
@@ -75,7 +75,7 @@
 
 <script setup lang="ts">
 import { COMPANY_INFO, NAV_LINKS, SECONDARY_LINKS, SOCIAL_LINKS } from './constants';
-import logoPng from '@/assets/images/logo1.png';
+import logoPng from '@/assets/images/logo/logo1.png';
 </script>
 
 <style scoped>

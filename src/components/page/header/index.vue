@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import logoPng from '@/assets/images/logo1.png';
+import logoPng from '@/assets/images/logo/logo1.png';
 import { ElButton } from 'element-plus';
 import { User, UserFilled } from '@element-plus/icons';
 import { useUserStore } from '@/stores';
