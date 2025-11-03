@@ -25,9 +25,16 @@
         <p v-if="!file" class="text-16px font-medium text-gray-600 mb-2">
           {{ placeholder }}
         </p>
-        <p v-else class="text-16px font-medium mb-2" style="color: #ff6b9d">
-          {{ file.name }}
-        </p>
+        <div v-else class="flex items-center gap-2 mb-2">
+          <p class="text-16px font-medium" style="color: #ff6b9d">
+            {{ file.name }}
+          </p>
+          <DeleteIcon
+            @click.stop="handleRemoveFile"
+            class="delete-icon cursor-pointer transition-all"
+            title="删除文件"
+          />
+        </div>
         <p class="text-13px text-gray-400">{{ description }}</p>
       </div>
     </div>
@@ -37,7 +44,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { ElMessage } from 'element-plus';
-import { AttachmentIcon, CloudUploadIcon } from './svg';
+import { AttachmentIcon, CloudUploadIcon, DeleteIcon } from './svg';
 
 interface FileTypeConfig {
   /** 文件扩展名列表，例如：['.docx', '.doc'] */
@@ -142,6 +149,16 @@ const handleDragLeave = () => {
   isDragging.value = false;
 };
 
+// 删除文件
+const handleRemoveFile = () => {
+  emit('update:file', null);
+  // 清空 input 的值，以便可以重新上传同一个文件
+  if (fileInput.value) {
+    fileInput.value.value = '';
+  }
+  ElMessage.success('文件已删除');
+};
+
 // 验证文件扩展名
 const validateExtension = (fileName: string): boolean => {
   const extension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
@@ -191,5 +208,19 @@ const validateFile = (file: File): boolean => {
 .upload-area:hover {
   border-color: #ff9ebd;
   background-color: #fff5f8;
+}
+
+/* 删除图标样式 */
+.delete-icon {
+  opacity: 0.6;
+}
+
+.delete-icon:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.delete-icon:active {
+  transform: scale(0.9);
 }
 </style>

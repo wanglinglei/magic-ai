@@ -3,11 +3,11 @@
  * @Date: 2025-11-03 09:56:24
  * @Description: 文件处理相关方法
  * @FilePath: /magicAI/src/utils/docx.ts
- * @LastEditTime: 2025-11-03 10:54:01
+ * @LastEditTime: 2025-11-03 11:17:12
  */
 import Docxtemplater from 'docxtemplater';
 import PizZip from 'pizzip';
-export { elMessageUtils } from './elMessage';
+import { elMessageUtils } from '@/utils';
 /**
  * @description: 解析DOCX模板文件，从中提取可替换的变量
  * @param {File} file - DOCX模板文件

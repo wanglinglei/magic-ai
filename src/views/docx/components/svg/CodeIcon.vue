@@ -1,3 +1,10 @@
+<!--
+ * @Author: wanglinglei
+ * @Date: 2025-11-03 09:49:00
+ * @Description: 代码图标
+ * @FilePath: /magicAI/src/views/docx/components/svg/CodeIcon.vue
+ * @LastEditTime: 2025-11-03 14:45:57
+-->
 <template>
   <svg :class="className" :style="style" fill="currentColor" viewBox="0 0 20 20">
     <path
@@ -19,4 +26,3 @@ withDefaults(defineProps<Props>(), {
   style: 'color: #ff6b9d',
 });
 </script>
-

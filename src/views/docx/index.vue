@@ -34,6 +34,18 @@
           />
         </div>
 
+        <!-- 模板文件和JSON数据输入 -->
+        <div class="grid grid-cols-2 gap-6 mb-8">
+          <UploadCard
+            v-model:file="contentFile"
+            title="上传内容文件"
+            placeholder="拖放DOCX文件到此处，或点击上传"
+            :file-types="DOCX_FILE_TYPE"
+            :max-size="10 * 1024 * 1024"
+          />
+          <JsonDataCard v-model:json-data="contentJsonData" v-model:json-error="contentJsonError" />
+        </div>
+
         <!-- 输出文件名设置 -->
         <div class="bg-white rounded-20px p-8 shadow-sm mb-8">
           <div class="flex items-center mb-6">
@@ -91,14 +103,15 @@ import { ElMessage } from 'element-plus';
 import UploadCard from './components/uoloadCard.vue';
 import JsonDataCard from './components/jsonDataCard.vue';
 import { DocumentIcon, DocumentsIcon } from './components/svg';
-import { DOCX_FILE_TYPE } from './constants/fileTypes';
+import { DOCX_FILE_TYPE } from '@/constants';
 import { parseDocxTemplateToJson } from '@/utils/docx';
+import { DocxService } from '@/services/docx';
 
 // 文件上传相关
 const templateFile = ref<File | null>(null);
 
 // JSON数据相关
-const templateJsonData = ref('');
+const templateJsonData = ref('[{"姓名":"","个人表现":"","结果":""}]');
 const templateJsonError = ref('');
 
 watch(
@@ -115,6 +128,60 @@ watch(
     }
   },
 );
+
+const contentFile = ref<File | null>(null);
+
+const contentJsonData = ref('');
+const contentJsonError = ref('');
+
+watch(
+  () => contentFile.value,
+  (newVal) => {
+    if (newVal) {
+      processContentFile();
+    }
+  },
+);
+
+/**
+ * @description: 处理内容文件
+ * @return {*}
+ */
+const processContentFile = async () => {
+  if (!contentFile.value) {
+    console.error('contentFile 为空');
+    return;
+  }
+
+  console.log('准备上传的文件信息：', {
+    name: contentFile.value.name,
+    size: contentFile.value.size,
+    type: contentFile.value.type,
+  });
+  console.log('模板JSON数据：', templateJsonData.value);
+
+  const formData = new FormData();
+  // 添加文件，第三个参数指定文件名
+  formData.append('rawDocument', contentFile.value, contentFile.value.name);
+  formData.append('templateJson', templateJsonData.value);
+
+  // 调试：打印 FormData 内容
+  console.log('FormData 内容：');
+  for (let [key, value] of formData.entries()) {
+    console.log(key, value);
+  }
+
+  try {
+    const result = await DocxService.processContentData(formData);
+    console.log('processContentFile result', result);
+    // result 是 Response<string> 类型，需要取 data 属性
+    contentJsonData.value = result.data;
+    return result.data;
+  } catch (error) {
+    console.error('处理文件失败：', error);
+    throw error;
+  }
+};
 
 // 输出文件名
 const outputFileName = ref('生成的文档');

@@ -1,2 +1,2 @@
-import { elMessageUtils } from './elMessage';
-import { parseDocxTemplateToJson, replaceDocxTemplate, batchGenerateDocx } from './docx';
+export { elMessageUtils } from './elMessage';
+export { parseDocxTemplateToJson, replaceDocxTemplate, batchGenerateDocx } from './docx';
