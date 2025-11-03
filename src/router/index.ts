@@ -13,6 +13,11 @@ const router = createRouter({
       name: 'Chat',
       component: () => import('@/views/chat/index.vue'),
     },
+    {
+      path: '/docx',
+      name: 'Docx',
+      component: () => import('@/views/docx/index.vue'),
+    },
   ],
 });
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-80% mx-auto flex justify-between items-center p-y-20px">
+  <div class="w-80% mx-auto flex justify-between items-center p-y-20px bg-transparent">
     <Logo />
     <div class="center-menu"></div>
     <div class="right-user">
