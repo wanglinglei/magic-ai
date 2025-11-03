@@ -1,6 +1,7 @@
 import chatPng from '@/assets/images/home/chat.png';
 import imagePng from '@/assets/images/home/image.png';
 import videoPng from '@/assets/images/home/video.png';
+import docxPng from '@/assets/images/home/docx.png';
 
 export const HOME_BANNER_LIST = [
   {
@@ -33,12 +34,12 @@ export const HOME_BANNER_LIST = [
     ],
   },
   {
-    title: '代码生成',
-    description: 'AI 代码生成工具',
-    image: chatPng,
+    title: 'DOCX模板生成器',
+    description: 'AI DOCX模板生成工具',
+    image: docxPng,
     labels: [
       { text: '新功能', colorClass: 'bg-purple-100 text-purple-700' },
-      { text: '编程', colorClass: 'bg-green-100 text-green-700' },
+      { text: '文档处理', colorClass: 'bg-green-100 text-green-700' },
     ],
   },
 ];
