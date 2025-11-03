@@ -3,7 +3,7 @@
  * @Date: 2025-11-03 09:56:24
  * @Description: 文件处理相关方法
  * @FilePath: /magicAI/src/utils/docx.ts
- * @LastEditTime: 2025-11-03 11:17:12
+ * @LastEditTime: 2025-11-03 16:08:55
  */
 import Docxtemplater from 'docxtemplater';
 import PizZip from 'pizzip';
@@ -52,17 +52,15 @@ export function parseDocxTemplateToJson(file: File): Promise<string> {
 
         if (!matches || matches.length === 0) {
           elMessageUtils.error('未找到可替换变量');
-          resolve('[]');
+          resolve('');
           return;
         }
 
         // console.log('matches', matches);
-        let jsonData: Record<string, any>[] = [];
+        let jsonData: Record<string, any> = {};
         matches.forEach((match) => {
           let key = match.replace(/[{}]/g, '').trim();
-          jsonData.push({
-            [key]: '',
-          });
+          jsonData[key] = '';
         });
 
         resolve(JSON.stringify(jsonData));

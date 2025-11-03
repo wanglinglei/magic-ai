@@ -111,7 +111,7 @@ import { DocxService } from '@/services/docx';
 const templateFile = ref<File | null>(null);
 
 // JSON数据相关
-const templateJsonData = ref('[{"姓名":"","个人表现":"","结果":""}]');
+const templateJsonData = ref('');
 const templateJsonError = ref('');
 
 watch(
@@ -172,11 +172,11 @@ const processContentFile = async () => {
   }
 
   try {
-    const result = await DocxService.processContentData(formData);
-    console.log('processContentFile result', result);
-    // result 是 Response<string> 类型，需要取 data 属性
-    contentJsonData.value = result.data;
-    return result.data;
+    const response = await DocxService.processContentData(formData);
+    if (response.success) {
+      const data = response.data || [];
+      contentJsonData.value = JSON.stringify(data);
+    }
   } catch (error) {
     console.error('处理文件失败：', error);
     throw error;
