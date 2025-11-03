@@ -9,9 +9,10 @@
       <textarea
         :value="formattedJsonData"
         @input="handleInput"
-        class="w-full box-border h-270px p-4 border-2 border-gray-200 rounded-12px font-mono text-13px resize-none focus:outline-none focus:border-pink-300 transition-colors"
+        class="w-full box-border h-270px p-4 border-2 border-solid border-gray-200 rounded-12px font-mono text-13px resize-none focus:outline-none focus:border-pink-300 transition-colors"
         :class="{ 'border-red-300': jsonError }"
         placeholder='示例: [{"name":"张三","age":25},{"name":"李四","age":30}]'
+        :disabled="disabled"
       ></textarea>
     </div>
     <div class="flex justify-between items-center">
@@ -32,6 +33,7 @@ import { CodeIcon } from './svg';
 interface Props {
   jsonData?: string;
   jsonError?: string;
+  disabled?: boolean;
 }
 
 interface Emits {
@@ -39,7 +41,7 @@ interface Emits {
   (e: 'update:jsonError', error: string): void;
 }
 
-const { jsonData, jsonError } = defineProps<Props>();
+const { jsonData, jsonError, disabled = false } = defineProps<Props>();
 
 const formattedJsonData = computed(() => {
   if (!jsonData) return '';

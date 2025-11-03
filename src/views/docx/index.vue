@@ -31,6 +31,7 @@
           <JsonDataCard
             v-model:json-data="templateJsonData"
             v-model:json-error="templateJsonError"
+            :disabled="true"
           />
         </div>
 
@@ -58,11 +59,16 @@
             <input
               v-model="outputFileName"
               type="text"
-              class="w-full px-5 py-4 border-2 border-gray-200 rounded-12px text-15px focus:outline-none focus:border-pink-300 transition-colors"
+              class="w-full box-border px-5 py-4 border-2 border-solid border-pink-200 rounded-12px text-15px focus:outline-none focus:border-pink-400 transition-colors"
               placeholder="生成的文档"
             />
           </div>
-          <p class="text-13px text-gray-500">单个文档：文件名.docx | 多个文档：文件名.zip</p>
+          <p class="text-14px text-gray-500">单个文档：文件名.docx</p>
+          <p class="text-14px text-gray-500">多个文档：文件名.zip</p>
+          <ul class="list-disc list-inside space-y-2 text-gray-500 text-12px">
+            <li>文件名-姓名.docx</li>
+            <li>文件名-姓名.docx</li>
+          </ul>
         </div>
 
         <!-- 生成按钮 -->
