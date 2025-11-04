@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Test</h1>
-    <RadioTag :options="options" v-model="selectedOption" />
+    <RadioTag title="测试" :options="options" v-model="selectedOption" />
     <CoreSender v-model="senderValue" @submit="handleSubmit">
       <template #header>
         <div class="header-self-wrap">
