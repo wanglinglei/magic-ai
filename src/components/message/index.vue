@@ -16,13 +16,14 @@ import { BubbleList } from 'vue-element-plus-x';
 import { MessageRole } from '@/constants';
 import { User, UserFilled } from '@element-plus/icons';
 import type { Message } from '@/services/chat/types';
+import type { TMessageRole } from '@/constants';
 import type { BubbleListItemProps, BubbleListProps } from 'vue-element-plus-x/types/BubbleList';
 const { messages = [] } = defineProps<{
   messages: Message[];
   maxHeight?: string;
 }>();
 
-const list = computed<BubbleListItemProps[]>(() => {
+const list = computed<(BubbleListItemProps & { role: TMessageRole })[]>(() => {
   return messages.map((item) => ({
     ...item,
     placement: item.role === MessageRole.USER ? 'end' : 'start',
