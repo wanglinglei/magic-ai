@@ -4,11 +4,24 @@
       <div class="w-500px">
         <CoreSender class="mb-24px" v-model="senderValue" @submit="handleSubmit">
           <template #prefix>
-            <div class="w-180px">
-              <Select style="width: 100%" :options="modelOptions" v-model="selectedModel" />
-            </div>
+            <button
+              class="ai-prompt-button flex items-center gap-8px px-16px py-8px rounded-8px text-14px font-medium transition-all hover:opacity-90"
+              :disabled="senderValue.length === 0"
+              @click="handleAiPrompt"
+            >
+              <MagicIcon />
+              <span>AI提示词</span>
+            </button>
           </template>
         </CoreSender>
+        <div class="w-180px mb-24px">
+          <Select
+            title="模型"
+            style="width: 100%"
+            :options="modelOptions"
+            v-model="selectedModel"
+          />
+        </div>
         <RadioTag
           title="质量"
           class="mb-24px"
@@ -29,11 +42,16 @@
 <script setup lang="ts">
 import { CoreSender } from '@/components/sender';
 import { RadioTag, Select } from '@/components/userAction';
+import { MagicIcon } from '@/assets/svg';
 import {
   getModelOptions,
   getQualityOptionsByModel,
   getResolutionsByModelAndQuality,
 } from './modelConfig/textToVideo';
+
+defineOptions({
+  name: 'VideoPage',
+});
 
 // 模型选择
 const modelOptions = getModelOptions();
@@ -55,6 +73,29 @@ const senderValue = ref('');
 const handleSubmit = (value: string) => {
   console.log(value);
 };
+
+const handleAiPrompt = () => {
+  console.log('AI提示词');
+  // 这里可以添加 AI 提示词的逻辑
+};
 </script>
 
-<style></style>
+<style scoped>
+.ai-prompt-button {
+  background-color: #f3e8ff;
+  color: #9333ea;
+  border: 2px solid #a855f7;
+  outline: none;
+  cursor: pointer;
+}
+
+.ai-prompt-button:hover {
+  background-color: #e9d5ff;
+  border-color: #9333ea;
+}
+
+.ai-prompt-button:active {
+  background-color: #ddd6fe;
+  border-color: #7e22ce;
+}
+</style>

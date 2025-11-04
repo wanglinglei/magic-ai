@@ -55,10 +55,10 @@ const handleSelect = (value: string | number) => {
 }
 
 .radio-tag-item {
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
   border: 2px solid transparent;
   background-color: #f3f4f6;
@@ -72,9 +72,9 @@ const handleSelect = (value: string | number) => {
 }
 
 .radio-tag-item.active {
-  background-color: #ede9fe;
-  border-color: #a78bfa;
-  color: #7c3aed;
+  background-color: #f3e8ff;
+  border-color: #a855f7;
+  color: #9333ea;
 }
 
 .radio-tag-item.active:hover {
