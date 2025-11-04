@@ -2,25 +2,25 @@ name: Static Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup pnpm and Node.js
-      uses: pnpm/action-setup@v2
-      with:
-        version: 8
-        node-version: '20'  # 在这里直接指定 Node.js 版本
-        
-    - name: Install dependencies
-      run: pnpm install
-      
-    - name: Build project
-      run: pnpm run build
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm and Node.js
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          node-version: '20' # 在这里直接指定 Node.js 版本
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build project
+        run: pnpm run build
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v4
