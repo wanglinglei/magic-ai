@@ -74,7 +74,7 @@
         <!-- 生成按钮 -->
         <div class="flex justify-center gap-6">
           <button
-            @click="generateSingleDocument"
+            @click="generateDocx('single')"
             :disabled="!canGenerate"
             class="px-12 py-5 rounded-full text-16px font-bold shadow-lg transition-all hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             style="background: linear-gradient(135deg, #ff9ebd 0%, #ff6b9d 100%); color: white"
@@ -86,7 +86,7 @@
           </button>
 
           <button
-            @click="generateMultipleDocuments"
+            @click="generateDocx('multiple')"
             :disabled="!canGenerate"
             class="px-12 py-5 rounded-full text-16px font-bold shadow-lg transition-all hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             style="background: linear-gradient(135deg, #ffa8c8 0%, #ff7fab 100%); color: white"
@@ -110,7 +110,11 @@ import UploadCard from './components/uoloadCard.vue';
 import JsonDataCard from './components/jsonDataCard.vue';
 import { DocumentIcon, DocumentsIcon } from './components/svg';
 import { DOCX_FILE_TYPE } from '@/constants';
-import { parseDocxTemplateToJson } from '@/utils/docx';
+import {
+  parseDocxTemplateToJson,
+  generateSingleDocument,
+  generateMultipleDocuments,
+} from '@/utils/docx';
 import { DocxService } from '@/services/docx';
 
 // 文件上传相关
@@ -194,34 +198,33 @@ const outputFileName = ref('生成的文档');
 
 // 检查是否可以生成
 const canGenerate = computed(() => {
-  return templateFile.value && templateJsonData.value.trim() && !templateJsonError.value;
+  return (
+    templateFile.value &&
+    contentFile.value &&
+    templateJsonData.value.trim() &&
+    contentJsonData.value.trim() &&
+    !templateJsonError.value &&
+    !contentJsonError.value
+  );
 });
 
-// 生成单个文档
-const generateSingleDocument = async () => {
+const generateDocx = async (type: 'single' | 'multiple') => {
   if (!canGenerate.value) return;
-
-  try {
-    ElMessage.info('正在生成单个文档...');
-    // TODO: 实现实际的文档生成逻辑
-    // 调用后端API，传递模板文件和JSON数据
-    await new Promise((resolve) => setTimeout(resolve, 1500)); // 模拟异步操作
-    ElMessage.success('文档生成成功！');
-  } catch (error) {
-    ElMessage.error('文档生成失败，请重试');
-    console.error(error);
+  if (!templateFile.value) {
+    ElMessage.error('请上传模板文件');
+    return;
   }
-};
-
-// 生成多个文档
-const generateMultipleDocuments = async () => {
-  if (!canGenerate.value) return;
-
+  if (!contentFile.value) {
+    ElMessage.error('请上传内容文件');
+    return;
+  }
   try {
-    ElMessage.info('正在生成多个文档...');
-    // TODO: 实现实际的文档生成逻辑
-    // 调用后端API，传递模板文件和JSON数据
-    await new Promise((resolve) => setTimeout(resolve, 1500)); // 模拟异步操作
+    const jsonData = JSON.parse(contentJsonData.value);
+    if (type === 'single') {
+      await generateSingleDocument(jsonData, templateFile.value, outputFileName.value);
+    } else {
+      await generateMultipleDocuments(jsonData, templateFile.value, outputFileName.value);
+    }
     ElMessage.success('文档生成成功！');
   } catch (error) {
     ElMessage.error('文档生成失败，请重试');

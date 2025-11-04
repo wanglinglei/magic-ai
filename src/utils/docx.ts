@@ -3,7 +3,7 @@
  * @Date: 2025-11-03 09:56:24
  * @Description: 文件处理相关方法
  * @FilePath: /magicAI/src/utils/docx.ts
- * @LastEditTime: 2025-11-03 18:59:01
+ * @LastEditTime: 2025-11-04 09:43:48
  */
 import createReport from 'docx-templates';
 import JSZip from 'jszip';
@@ -164,6 +164,7 @@ export async function generateSingleDocument(
         template: new Uint8Array(templateContent),
         data: data,
         cmdDelimiter: ['{', '}'], // 明确指定模板分隔符
+        noSandbox: true, // 在浏览器环境中使用 Function 而不是 vm.Script
       });
 
       console.log(`第 ${i + 1} 页文档生成完成，大小: ${report.length} 字节`);
@@ -235,11 +236,12 @@ export async function generateMultipleDocuments(
         template: new Uint8Array(templateContent),
         data: firstData,
         cmdDelimiter: ['{', '}'],
+        noSandbox: true, // 在浏览器环境中使用 Function 而不是 vm.Script
       });
 
       // 如果数据中包含 name 字段，拼接到文件名中
       let fileName = outputFileName;
-      const dataName = firstData.name;
+      const dataName = firstData.name || firstData['姓名'] || '';
       if (dataName) {
         fileName = `${fileName}-${dataName}`;
       }
@@ -268,17 +270,18 @@ export async function generateMultipleDocuments(
         template: new Uint8Array(templateContent),
         data: currentData,
         cmdDelimiter: ['{', '}'],
+        noSandbox: true, // 在浏览器环境中使用 Function 而不是 vm.Script
       });
 
       // 使用数据中的 name 字段或索引作为文件名
-      const itemId = currentData.name || i + 1;
+      const itemId = currentData.name || currentData['姓名'] || i + 1;
       zip.file(`${outputFileName}-${itemId}.docx`, generatedDoc);
     }
 
     // 生成 ZIP 文件并下载
     console.log('正在打包文件...');
     const content = await zip.generateAsync({ type: 'blob' });
-    saveAs(content, `${outputFileName}_集合.zip`);
+    saveAs(content, `${outputFileName}.zip`);
     elMessageUtils.success(`成功生成 ${jsonData.length} 个文档`);
     console.log('多个文档生成成功');
   } catch (error) {
@@ -318,6 +321,7 @@ export async function replaceDocxTemplate(
           template: new Uint8Array(templateContent),
           data: data,
           cmdDelimiter: ['{', '}'], // 使用 {xxx} 作为模板分隔符
+          noSandbox: true, // 在浏览器环境中使用 Function 而不是 vm.Script
         });
 
         resolve(report);
