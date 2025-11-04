@@ -46,30 +46,6 @@ export const languageStyle = [
   },
 ];
 
-// 根据索引返回不同的默认样式（未选中状态）
-export const getDefaultStyle = (index: number) => {
-  const styles = [
-    'bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100',
-    'bg-cyan-50 text-cyan-600 border-cyan-200 hover:bg-cyan-100',
-    'bg-purple-50 text-purple-600 border-purple-200 hover:bg-purple-100',
-    'bg-pink-50 text-pink-600 border-pink-200 hover:bg-pink-100',
-    'bg-amber-50 text-amber-600 border-amber-200 hover:bg-amber-100',
-  ];
-  return styles[index % styles.length];
-};
-
-// 根据索引返回不同的选中样式
-export const getSelectedStyle = (index: number) => {
-  const styles = [
-    'bg-blue-500 text-white border-blue-500 shadow-lg',
-    'bg-cyan-500 text-white border-cyan-500 shadow-lg',
-    'bg-purple-500 text-white border-purple-500 shadow-lg',
-    'bg-pink-500 text-white border-pink-500 shadow-lg',
-    'bg-amber-500 text-white border-amber-500 shadow-lg',
-  ];
-  return styles[index % styles.length];
-};
-
 export const getSystemPrompt = (styleId: string) => {
   const style = languageStyle.find((item) => item.id === styleId);
   return style?.system_prompt || '';
