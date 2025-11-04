@@ -7,11 +7,18 @@
       <div class="absolute bottom-200px left-0 w-full">
         <CoreSender v-model="senderValue" @submit="handleSubmit">
           <template #header>
-            <div class="flex flex-col gap-10px">
-              <div v-for="item in languageStyle" :key="item.id" class="flex items-center gap-10px">
-                <div class="w-10px h-10px rounded-full"></div>
-                <div class="text-14px font-bold">{{ item.name }}</div>
-              </div>
+            <div class="flex justify-start gap-12px p-24px flex-wrap">
+              <button
+                v-for="(item, index) in languageStyle"
+                :key="item.id"
+                @click="selectStyle(item.id)"
+                class="px-20px py-10px rounded-full text-14px font-medium transition-all cursor-pointer border-2 border-solid hover:scale-105"
+                :class="[
+                  selectedStyleId === item.id ? getSelectedStyle(index) : getDefaultStyle(index),
+                ]"
+              >
+                {{ item.name }}
+              </button>
             </div>
           </template>
         </CoreSender>
@@ -22,15 +29,34 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { languageStyle } from './languageStyle';
+import { languageStyle, getDefaultStyle, getSelectedStyle, getSystemPrompt } from './languageStyle';
 import { CoreSender } from '@/components/sender';
 import type { Message } from '@/services/chat/types';
 import { ChatService } from '@/services/chat';
-import { MessageRole, type TMessageRole } from '@/constants';
+import { MessageRole } from '@/constants';
 import Messages from '@/components/message/index.vue';
-import { Header, Footer, PageContainer } from '@/components/page';
+import { Header } from '@/components/page';
+
+defineOptions({
+  name: 'ChatPage',
+});
+
 const list = ref<Message[]>([]);
 const senderValue = ref('');
+const selectedStyleId = ref<string>(''); // 默认选中第一个
+
+/**
+ * @description: 选择风格
+ * @param {*} styleId
+ * @return {*}
+ */
+const selectStyle = (styleId: string) => {
+  selectedStyleId.value = styleId;
+  const selectedStyle = languageStyle.find((item) => item.id === styleId);
+  console.log('选中的风格：', selectedStyle?.name);
+  // 这里可以添加更多的逻辑，比如更新系统提示词等
+};
+
 const handleSubmit = async (value: string) => {
   console.log(value);
 
@@ -40,11 +66,20 @@ const handleSubmit = async (value: string) => {
   };
   list.value.push(message);
 
+  const contentMessages = list.value.map((item) => ({
+    role: item.role,
+    content: item.content,
+  }));
+  const systemPrompt = getSystemPrompt(selectedStyleId.value);
+  if (systemPrompt) {
+    contentMessages.unshift({
+      role: MessageRole.SYSTEM,
+      content: systemPrompt,
+    });
+  }
+
   const res = await ChatService.sendMessage({
-    messages: list.value.map((item) => ({
-      role: item.role,
-      content: item.content,
-    })),
+    messages: contentMessages,
     provider: 'ty',
   });
   if (res.success) {
@@ -56,4 +91,8 @@ const handleSubmit = async (value: string) => {
 };
 </script>
 
-<style></style>
+<style scoped>
+button {
+  outline: none;
+}
+</style>

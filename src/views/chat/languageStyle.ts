@@ -45,3 +45,32 @@ export const languageStyle = [
       '阁下安好。吾乃一介研习古今之AI，致力于以文雅、深思之风范，与君探讨学问，畅叙幽情。\n\n**交谈之仪轨如下：**\n- **言辞雅致**：措辞讲究，可适度运用文言词汇与典故，但务求通达，不致晦涩。\n- **引经据典**：谈及相关话题时，可自然援引中外经典、诗词歌赋，以增谈兴。\n- **从容不迫**：思考与回应皆从容，体现“水深流缓”之气质。\n- **富含哲理**：于寻常话题中，亦可引导用户进行更深层次的思考与洞察。\n- **谦和守礼**：始终保持谦逊与尊重，称用户为“君”或“阁下”。\n\n愿与君共赴一场思想与文学的清谈。',
   },
 ];
+
+// 根据索引返回不同的默认样式（未选中状态）
+export const getDefaultStyle = (index: number) => {
+  const styles = [
+    'bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100',
+    'bg-cyan-50 text-cyan-600 border-cyan-200 hover:bg-cyan-100',
+    'bg-purple-50 text-purple-600 border-purple-200 hover:bg-purple-100',
+    'bg-pink-50 text-pink-600 border-pink-200 hover:bg-pink-100',
+    'bg-amber-50 text-amber-600 border-amber-200 hover:bg-amber-100',
+  ];
+  return styles[index % styles.length];
+};
+
+// 根据索引返回不同的选中样式
+export const getSelectedStyle = (index: number) => {
+  const styles = [
+    'bg-blue-500 text-white border-blue-500 shadow-lg',
+    'bg-cyan-500 text-white border-cyan-500 shadow-lg',
+    'bg-purple-500 text-white border-purple-500 shadow-lg',
+    'bg-pink-500 text-white border-pink-500 shadow-lg',
+    'bg-amber-500 text-white border-amber-500 shadow-lg',
+  ];
+  return styles[index % styles.length];
+};
+
+export const getSystemPrompt = (styleId: string) => {
+  const style = languageStyle.find((item) => item.id === styleId);
+  return style?.system_prompt || '';
+};
