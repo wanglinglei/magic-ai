@@ -13,10 +13,10 @@ export default defineConfig({
   },
   shortcuts: [
     {
-      operation: 'flex gap-x-6px justify-center items-center',
       'flex-center': 'flex justify-center items-center',
       'flex-col-center': 'flex justify-center items-center flex-col',
       'flex-between': 'flex justify-between items-center',
+      'flex-start': 'flex justify-start items-center',
       'theme-green': 'text-[#00C800]',
       'theme-pale-green': 'text-[#61D6D1]',
       'theme-blue': 'text-[#1296DB]',

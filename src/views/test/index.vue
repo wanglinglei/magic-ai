@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>Test</h1>
+    <RadioTag :options="options" v-model="selectedOption" />
     <CoreSender v-model="senderValue" @submit="handleSubmit">
       <template #header>
         <div class="header-self-wrap">
@@ -22,11 +23,24 @@
 
 <script setup lang="ts">
 import { CoreSender } from '@/components/sender';
+import { RadioTag } from '@/components/userAction';
 import { ref } from 'vue';
 const senderValue = ref('123');
 const handleSubmit = (value: string) => {
   console.log(value);
 };
+
+const options = [
+  {
+    label: '选项1',
+    value: '1',
+  },
+  {
+    label: '选项2',
+    value: '2',
+  },
+];
+const selectedOption = ref('1');
 </script>
 
 <style></style>

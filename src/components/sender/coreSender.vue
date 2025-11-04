@@ -4,6 +4,7 @@
     variant="updown"
     clearable
     allow-speech
+    :auto-size="autoSize"
     :placeholder="placeholder"
     @submit="handleSubmit"
     ref="senderRef"
@@ -22,9 +23,14 @@
 <script setup lang="ts">
 import { Sender } from 'vue-element-plus-x';
 
-const { modelValue = '', placeholder = '请输入内容' } = defineProps<{
+const {
+  modelValue = '',
+  placeholder = '请输入内容',
+  autoSize = { minRows: 3, maxRows: 6 },
+} = defineProps<{
   modelValue?: string;
   placeholder?: string;
+  autoSize?: { minRows: number; maxRows: number };
 }>();
 const senderValue = ref(modelValue);
 const slots = useSlots();
