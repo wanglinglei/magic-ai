@@ -2,8 +2,8 @@
  * @Author: wanglinglei
  * @Date: 2025-11-03 09:56:24
  * @Description: 文件处理相关方法
- * @FilePath: /magicAI/src/utils/docx.ts
- * @LastEditTime: 2025-11-04 09:43:48
+ * @FilePath: /magicAI/src/views/docx/docx.ts
+ * @LastEditTime: 2025-11-04 09:49:06
  */
 import createReport from 'docx-templates';
 import JSZip from 'jszip';

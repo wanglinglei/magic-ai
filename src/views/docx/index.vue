@@ -77,7 +77,12 @@
             @click="generateDocx('single')"
             :disabled="!canGenerate"
             class="px-12 py-5 rounded-full text-16px font-bold shadow-lg transition-all hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-            style="background: linear-gradient(135deg, #ff9ebd 0%, #ff6b9d 100%); color: white"
+            style="
+              background: linear-gradient(135deg, #ff9ebd 0%, #ff6b9d 100%);
+              color: white;
+              border: 2px solid #ff6b9d;
+              outline: none;
+            "
           >
             <div class="flex items-center">
               <DocumentIcon class="w-5 h-5 mr-2" style="color: white" />
@@ -89,7 +94,12 @@
             @click="generateDocx('multiple')"
             :disabled="!canGenerate"
             class="px-12 py-5 rounded-full text-16px font-bold shadow-lg transition-all hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-            style="background: linear-gradient(135deg, #ffa8c8 0%, #ff7fab 100%); color: white"
+            style="
+              background: linear-gradient(135deg, #ffa8c8 0%, #ff7fab 100%);
+              color: white;
+              border: 2px solid #ff7fab;
+              outline: none;
+            "
           >
             <div class="flex items-center">
               <DocumentsIcon class="w-5 h-5 mr-2" style="color: white" />
@@ -110,11 +120,7 @@ import UploadCard from './components/uoloadCard.vue';
 import JsonDataCard from './components/jsonDataCard.vue';
 import { DocumentIcon, DocumentsIcon } from './components/svg';
 import { DOCX_FILE_TYPE } from '@/constants';
-import {
-  parseDocxTemplateToJson,
-  generateSingleDocument,
-  generateMultipleDocuments,
-} from '@/utils/docx';
+import { parseDocxTemplateToJson, generateSingleDocument, generateMultipleDocuments } from './docx';
 import { DocxService } from '@/services/docx';
 
 // 文件上传相关
