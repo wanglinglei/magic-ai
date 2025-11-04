@@ -13,8 +13,8 @@
         <slot name="header"></slot>
       </div>
     </template>
-    <template #default>
-      <slot></slot>
+    <template #prefix>
+      <slot name="prefix"></slot>
     </template>
   </Sender>
 </template>
