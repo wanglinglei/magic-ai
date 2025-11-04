@@ -5,13 +5,16 @@
       <Messages :messages="list" />
 
       <div class="absolute bottom-200px left-0 w-full">
-        <Sender
-          v-model="senderValue"
-          variant="updown"
-          clearable
-          allow-speech
-          @submit="handleSubmit"
-        />
+        <CoreSender v-model="senderValue" @submit="handleSubmit">
+          <template #header>
+            <div class="flex flex-col gap-10px">
+              <div v-for="item in languageStyle" :key="item.id" class="flex items-center gap-10px">
+                <div class="w-10px h-10px rounded-full"></div>
+                <div class="text-14px font-bold">{{ item.name }}</div>
+              </div>
+            </div>
+          </template>
+        </CoreSender>
       </div>
     </main>
   </div>
@@ -19,7 +22,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Sender } from 'vue-element-plus-x';
+import { languageStyle } from './languageStyle';
+import { CoreSender } from '@/components/sender';
 import type { Message } from '@/services/chat/types';
 import { ChatService } from '@/services/chat';
 import { MessageRole, type TMessageRole } from '@/constants';
@@ -35,6 +39,7 @@ const handleSubmit = async (value: string) => {
     content: value,
   };
   list.value.push(message);
+
   const res = await ChatService.sendMessage({
     messages: list.value.map((item) => ({
       role: item.role,

@@ -28,6 +28,11 @@ const router = createRouter({
       name: ROUTER_PATH_NAME.DOCX,
       component: () => import('@/views/docx/index.vue'),
     },
+    {
+      path: '/test',
+      name: ROUTER_PATH_NAME.TEST,
+      component: () => import('@/views/test/index.vue'),
+    },
   ],
 });
 
