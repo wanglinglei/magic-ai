@@ -2,47 +2,25 @@ name: Static Deploy
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          run_install: false # 手动控制安装过程
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ${{ env.STORE_PATH }}
-            node_modules
-            **/node_modules
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile # 类似 npm ci
-
-      - name: Build project
-        run: pnpm run build
+    - uses: actions/checkout@v4
+    
+    - name: Setup pnpm and Node.js
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+        node-version: '20'  # 在这里直接指定 Node.js 版本
+        
+    - name: Install dependencies
+      run: pnpm install
+      
+    - name: Build project
+      run: pnpm run build
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v4
