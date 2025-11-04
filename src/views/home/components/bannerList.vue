@@ -35,5 +35,16 @@ const handleClick = (pathName: TRouterPathName) => {
   });
 };
 </script>
+<style lang="less" scoped>
+.card-container {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
 
-<style></style>
+.card-container:hover {
+  transform: translateY(-4px);
+}
+
+.icon-container {
+  background: linear-gradient(135deg, #e8eeff 0%, #d5dfff 100%);
+}
+</style>
