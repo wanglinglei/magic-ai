@@ -6,7 +6,6 @@
           <template #prefix>
             <button
               class="ai-prompt-button flex items-center gap-8px px-16px py-8px rounded-8px text-14px font-medium transition-all hover:opacity-90"
-              :disabled="senderValue.length === 0"
               @click="handleAiPrompt"
             >
               <MagicIcon />
@@ -34,6 +33,13 @@
           :options="resolutionOptions"
           v-model="selectedResolution"
         />
+
+        <button
+          class="ai-prompt-button flex items-center justify-center gap-8px px-16px py-8px rounded-8px text-14px font-medium transition-all hover:opacity-90 mt-24px"
+          @click="handleStartGenerate"
+        >
+          <span>开始生成</span>
+        </button>
       </div>
     </div>
   </div>
@@ -48,6 +54,8 @@ import {
   getQualityOptionsByModel,
   getResolutionsByModelAndQuality,
 } from './modelConfig/textToVideo';
+import { systemPrompt } from './modelConfig/constants';
+import { ChatService } from '@/services/chat';
 
 defineOptions({
   name: 'VideoPage',
@@ -74,9 +82,23 @@ const handleSubmit = (value: string) => {
   console.log(value);
 };
 
-const handleAiPrompt = () => {
+const handleAiPrompt = async () => {
+  // 一只小猫在桌子上跳来跳去
   console.log('AI提示词');
   // 这里可以添加 AI 提示词的逻辑
+  const response = await ChatService.sendMessage({
+    provider: 'ty',
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: senderValue.value },
+    ],
+  });
+  console.log('优化提示词', response);
+  // senderValue.value = response.content;
+};
+
+const handleStartGenerate = () => {
+  console.log('开始生成');
 };
 </script>
 
