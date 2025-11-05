@@ -169,23 +169,10 @@ const processContentFile = async () => {
     return;
   }
 
-  console.log('准备上传的文件信息：', {
-    name: contentFile.value.name,
-    size: contentFile.value.size,
-    type: contentFile.value.type,
-  });
-  console.log('模板JSON数据：', templateJsonData.value);
-
   const formData = new FormData();
   // 添加文件，第三个参数指定文件名
   formData.append('rawDocument', contentFile.value, contentFile.value.name);
   formData.append('templateJson', templateJsonData.value);
-
-  // 调试：打印 FormData 内容
-  console.log('FormData 内容：');
-  for (let [key, value] of formData.entries()) {
-    console.log(key, value);
-  }
 
   try {
     const response = await DocxService.processContentData(formData);

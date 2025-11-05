@@ -4,12 +4,7 @@
       class="w-85% border-1px border-solid border-gray-200 rounded-20px h-80vh p-40px flex justify-start"
     >
       <div class="w-500px">
-        <CoreSender
-          ref="coreSenderRef"
-          class="mb-24px"
-          v-model="senderValue"
-          @submit="handleSubmit"
-        >
+        <CoreSender ref="coreSenderRef" class="mb-24px" v-model="senderValue">
           <template #prefix>
             <button
               class="ai-prompt-button flex items-center gap-8px px-16px py-8px rounded-8px text-14px font-medium transition-all hover:opacity-90"
@@ -143,9 +138,7 @@ const selectedFps = ref(30);
 
 const senderValue = ref('');
 const coreSenderRef = useTemplateRef('coreSenderRef');
-const handleSubmit = (value: string) => {
-  console.log(value);
-};
+const handleSubmit = (value: string) => {};
 
 const handleAiPrompt = async () => {
   // 一只小猫在桌子上跳来跳去
@@ -225,9 +218,6 @@ const generateParams = () => {
  * @return {*}
  */
 const handleStartGenerate = async () => {
-  console.log('开始生成');
-  // https://dashscope-result-bj.oss-accelerate.aliyuncs.com/1d/67/20251105/17918e08/0ef16111-8022-41ea-9ec2-714d12417b9f.mp4?Expires=1762395064&OSSAccessKeyId=LTAI5tDUB1cEqFCYhEwWry26&Signature=33dKws2cykGfteByEME4O1LwsH0%3D
-
   const params: GenerateVideoRequest = generateParams();
   const response = await VideoService.generateVideo(params);
   if (response.success) {

@@ -3,7 +3,7 @@
  * @Date: 2025-11-03 09:56:24
  * @Description: 文件处理相关方法
  * @FilePath: /magicAI/src/views/docx/docx.ts
- * @LastEditTime: 2025-11-04 09:49:06
+ * @LastEditTime: 2025-11-05 15:08:47
  */
 import createReport from 'docx-templates';
 import JSZip from 'jszip';
@@ -53,7 +53,6 @@ export async function parseDocxTemplateToJson(file: File): Promise<string> {
       .replace(/<[^>]+>/g, ' ') // 移除所有 XML 标签
       .replace(/\s+/g, ' ') // 合并多个空格
       .trim();
-    console.log('提取的文本内容：', textContent);
 
     // 使用正则表达式提取 {xxx} 格式的变量
     // 支持中文、英文、数字、下划线、点号等字符
@@ -65,9 +64,9 @@ export async function parseDocxTemplateToJson(file: File): Promise<string> {
       return '';
     }
 
-    let jsonData: Record<string, any> = {};
+    const jsonData: Record<string, any> = {};
     matches.forEach((match) => {
-      let key = match.replace(/[{}]/g, '').trim();
+      const key = match.replace(/[{}]/g, '').trim();
       jsonData[key] = '';
     });
 
@@ -149,15 +148,12 @@ export async function generateSingleDocument(
       throw new Error('没有数据需要处理');
     }
 
-    console.log('开始生成单个文档');
     // 为每条数据生成单独的页面
     const pageBuffers: Uint8Array[] = [];
     const templateContent = await getFileContent(templateFile);
 
     for (let i = 0; i < jsonData.length; i++) {
       const data = jsonData[i];
-      console.log(`正在处理第 ${i + 1} 页数据`);
-      console.log('数据内容:', JSON.stringify(data, null, 2));
 
       // 使用 docx-templates 生成单页文档
       const report = await createReport({
@@ -167,7 +163,6 @@ export async function generateSingleDocument(
         noSandbox: true, // 在浏览器环境中使用 Function 而不是 vm.Script
       });
 
-      console.log(`第 ${i + 1} 页文档生成完成，大小: ${report.length} 字节`);
       pageBuffers.push(report);
     }
 
@@ -182,7 +177,6 @@ export async function generateSingleDocument(
 
       // 合并其他页面
       for (let i = 1; i < pageBuffers.length; i++) {
-        console.log(`正在合并第 ${i + 1} 页...`);
         const nextBuffer = pageBuffers[i];
         if (nextBuffer) {
           finalBuffer = await mergeDocuments(finalBuffer, nextBuffer);
@@ -195,7 +189,6 @@ export async function generateSingleDocument(
       });
       saveAs(blob, `${outputFileName}.docx`);
       elMessageUtils.success('单个文档生成成功');
-      console.log('单个文档生成成功');
     }
   } catch (error) {
     console.error('生成单个文档失败:', error);
@@ -222,7 +215,6 @@ export async function generateMultipleDocuments(
       throw new Error('没有数据需要处理');
     }
 
-    console.log(`开始生成 ${jsonData.length} 个文档`);
     const templateContent = await getFileContent(templateFile);
 
     // 如果只有一条数据，直接下载单个文档
@@ -251,7 +243,6 @@ export async function generateMultipleDocuments(
       });
       saveAs(blob, `${fileName}.docx`);
       elMessageUtils.success('文档生成成功');
-      console.log('单个文档生成成功');
       return;
     }
 
@@ -260,7 +251,6 @@ export async function generateMultipleDocuments(
 
     // 逐个生成文档并添加到 ZIP
     for (let i = 0; i < jsonData.length; i++) {
-      console.log(`正在生成文档 ${i + 1}/${jsonData.length}...`);
       const currentData = jsonData[i];
       if (!currentData) {
         continue;
@@ -279,11 +269,9 @@ export async function generateMultipleDocuments(
     }
 
     // 生成 ZIP 文件并下载
-    console.log('正在打包文件...');
     const content = await zip.generateAsync({ type: 'blob' });
     saveAs(content, `${outputFileName}.zip`);
     elMessageUtils.success(`成功生成 ${jsonData.length} 个文档`);
-    console.log('多个文档生成成功');
   } catch (error) {
     console.error('生成多个文档失败:', error);
     elMessageUtils.error(`生成失败: ${error instanceof Error ? error.message : '未知错误'}`);

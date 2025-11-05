@@ -122,9 +122,6 @@ const resetStyle = () => {
  */
 const selectStyle = (styleId: string) => {
   selectedStyleId.value = styleId;
-  const selectedStyle = languageStyle.find((item) => item.id === styleId);
-  console.log('选中的风格：', selectedStyle?.name);
-  // 这里可以添加更多的逻辑，比如更新系统提示词等
 };
 
 const list = ref<Message[]>([]);
@@ -154,6 +151,7 @@ const handleSubmit = async (value: string) => {
     provider: 'ty',
   });
   if (res.success) {
+    coreSenderRef.value?.setSenderValue('');
     list.value.push({
       role: MessageRole.ASSISTANT,
       content: res.data.content,
