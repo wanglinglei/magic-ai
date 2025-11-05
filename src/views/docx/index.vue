@@ -1,9 +1,10 @@
 <template>
-  <PageContainer>
-    <div
-      class="min-h-[calc(100vh-200px)] py-12"
-      style="background: linear-gradient(135deg, #fef5f9 0%, #fff0f8 50%, #fef5f9 100%)"
-    >
+  <div
+    class="w-100% h-100vh flex justify-start items-center flex-col"
+    style="background: linear-gradient(135deg, #fef5f9 0%, #fff0f8 50%, #fef5f9 100%)"
+  >
+    <Header />
+    <div class="w-100% mx-auto min-h-[calc(100vh-200px)] py-12">
       <div class="w-80% mx-auto">
         <!-- 使用说明 -->
         <div class="mb-8 bg-white rounded-20px p-8 shadow-sm">
@@ -109,12 +110,12 @@
         </div>
       </div>
     </div>
-  </PageContainer>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { PageContainer } from '@/components/page';
+import { Header } from '@/components/page';
 import { ElMessage } from 'element-plus';
 import UploadCard from './components/uoloadCard.vue';
 import JsonDataCard from './components/jsonDataCard.vue';

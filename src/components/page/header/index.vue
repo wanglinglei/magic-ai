@@ -3,7 +3,7 @@
     <Logo />
     <div class="center-menu"></div>
     <div class="right-user">
-      <div v-if="user">
+      <!-- <div v-if="user">
         <el-dropdown>
           <div
             v-if="user.avatar"
@@ -23,7 +23,7 @@
       </div>
       <div v-else>
         <el-button type="primary" @click="handleLogin">登录</el-button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

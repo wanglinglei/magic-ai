@@ -1,5 +1,6 @@
 <template>
-  <div class="h-100vh flex-col-center">
+  <div class="h-100vh flex justify-start items-center flex-col">
+    <Header />
     <div
       class="w-85% border-1px border-solid border-gray-200 rounded-20px h-80vh p-40px flex justify-start"
     >
@@ -81,6 +82,7 @@
 import { CoreSender } from '@/components/sender';
 import { RadioTag, Select } from '@/components/userAction';
 import { MagicIcon } from '@/assets/svg';
+import { Header } from '@/components/page';
 import {
   getModelOptions,
   getQualityOptionsByModel,
