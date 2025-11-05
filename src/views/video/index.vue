@@ -21,7 +21,7 @@
             </button>
           </template>
         </CoreSender>
-        <div class="w-180px mb-24px">
+        <div class="w-180px mb-16px">
           <Select
             title="供应商"
             style="width: 100%"
@@ -29,7 +29,7 @@
             v-model="selectedProvider"
           />
         </div>
-        <div class="w-180px mb-24px">
+        <div class="w-180px mb-16px">
           <Select
             title="模型"
             style="width: 100%"
@@ -39,19 +39,21 @@
         </div>
         <RadioTag
           title="质量"
-          class="mb-24px"
+          class="mb-16px"
           :options="qualityOptions"
           v-model="selectedQuality"
         />
         <RadioTag
+          v-if="selectedProvider === 'glm'"
           title="分辨率"
-          class="mt-24px"
+          class="mb-16px"
           :options="resolutionOptions"
           v-model="selectedResolution"
         />
+        <RadioTag title="fps" class="mb-16px" :options="fpsConfig" v-model="selectedFps" />
         <RadioTag
           title="时长"
-          class="mb-24px"
+          class="mb-16px"
           :options="durationOptions"
           v-model="selectedDuration"
         />
@@ -89,7 +91,13 @@ import {
   getQualityOptionsByModel,
   getResolutionsByModelAndQuality,
   getDurationOptionsByModel,
-} from './modelConfig/textToVideo';
+} from './modelConfig/tyToVideo';
+import {
+  glmQualityConfig,
+  glmSizeConfig,
+  glmDurationConfig,
+  fpsConfig,
+} from './modelConfig/glmToVideo';
 import { systemPrompt } from './modelConfig/constants';
 import { ChatService, VideoService, type GenerateVideoRequest } from '@/services';
 import { modelProvider } from '@/constants/model';
@@ -104,19 +112,34 @@ const selectedModel = ref('wan2.5-t2v-preview');
 
 // 质量选择
 const qualityOptions = computed(() => {
+  if (selectedProvider.value === 'glm') {
+    return glmQualityConfig;
+  }
   return getQualityOptionsByModel(selectedModel.value);
 });
 const selectedQuality = ref(1080);
 
 // 分辨率选择
 const resolutionOptions = computed(() => {
+  if (selectedProvider.value === 'glm') {
+    return glmSizeConfig;
+  }
   return getResolutionsByModelAndQuality(selectedModel.value, selectedQuality.value);
 });
 const selectedResolution = ref('1920*1080');
 
 // 时长选择
-const durationOptions = getDurationOptionsByModel(selectedModel.value);
+const durationOptions = computed(() => {
+  if (selectedProvider.value === 'glm') {
+    return glmDurationConfig;
+  }
+  return getDurationOptionsByModel(selectedModel.value);
+});
 const selectedDuration = ref(5);
+
+// fps选择
+
+const selectedFps = ref(30);
 
 const senderValue = ref('');
 const coreSenderRef = useTemplateRef('coreSenderRef');
@@ -168,6 +191,35 @@ const videoDisplaySize = computed(() => {
   };
 });
 
+const generateParams = () => {
+  if (selectedProvider.value === 'glm') {
+    return {
+      size: selectedResolution.value.replace('*', 'x'),
+      duration: selectedDuration.value,
+      audio: true,
+      fps: selectedFps.value,
+      quality: selectedQuality.value,
+      provider: selectedProvider.value,
+      model: 'CogVideoX-Flash',
+      with_audio: true,
+      watermark_enabled: false,
+    };
+  } else {
+    return {
+      provider: selectedProvider.value,
+      model: selectedModel.value,
+      input: {
+        prompt: senderValue.value,
+      },
+      parameters: {
+        size: selectedResolution.value,
+        duration: selectedDuration.value,
+        audio: true,
+      },
+    };
+  }
+};
+
 /**
  * @description: 开始生成视频
  * @return {*}
@@ -176,18 +228,7 @@ const handleStartGenerate = async () => {
   console.log('开始生成');
   // https://dashscope-result-bj.oss-accelerate.aliyuncs.com/1d/67/20251105/17918e08/0ef16111-8022-41ea-9ec2-714d12417b9f.mp4?Expires=1762395064&OSSAccessKeyId=LTAI5tDUB1cEqFCYhEwWry26&Signature=33dKws2cykGfteByEME4O1LwsH0%3D
 
-  const params: GenerateVideoRequest = {
-    provider: selectedProvider.value,
-    model: selectedModel.value,
-    input: {
-      prompt: senderValue.value,
-    },
-    parameters: {
-      size: selectedResolution.value,
-      duration: selectedDuration.value,
-      audio: true,
-    },
-  };
+  const params: GenerateVideoRequest = generateParams();
   const response = await VideoService.generateVideo(params);
   if (response.success) {
     resultVideoUrl.value = response.data.videoUrl;

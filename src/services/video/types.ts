@@ -10,9 +10,21 @@ export interface VideoGenerateParameters {
   audio?: boolean; // 是否包含音频
 }
 
-export interface GenerateVideoRequest {
+export interface TyGenerateVideoRequest {
   model: string;
   input: VideoGenerateInput;
   parameters: VideoGenerateParameters;
   provider: string;
+}
+
+export interface GlmGenerateVideoRequest {
+  size: string;
+  duration: number;
+  audio: boolean;
+  fps: number;
+  quality: number;
+  provider: string;
+  model: string;
+  with_audio?: boolean;
+  watermark_enabled?: boolean;
 }
