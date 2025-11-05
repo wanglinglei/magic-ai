@@ -55,9 +55,9 @@ const handleSelect = (value: string | number) => {
 }
 
 .radio-tag-item {
-  padding: 10px 20px;
+  padding: 6px 12px;
   border-radius: 12px;
-  font-size: 15px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   border: 2px solid transparent;

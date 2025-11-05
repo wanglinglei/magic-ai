@@ -31,7 +31,7 @@ export const modelConfig = {
   'wan2.5-t2v-preview': {
     name: 'wan2.5-t2v-preview',
     displayName: 'Wan2.5 T2V Preview',
-    defaultResolution: '1920×1080',
+    defaultResolution: '1920*1080',
     availableQualities: [480, 720, 1080],
     availableDurations: [5, 10],
     defaultDuration: 5,
@@ -40,7 +40,7 @@ export const modelConfig = {
   'wan2.2-t2v-plus': {
     name: 'wan2.2-t2v-plus',
     displayName: 'Wan2.2 T2V Plus',
-    defaultResolution: '1920×1080',
+    defaultResolution: '1920*1080',
     availableQualities: [480, 1080],
     availableDurations: [5],
     defaultDuration: 5,
@@ -49,7 +49,7 @@ export const modelConfig = {
   'wanx2.1-t2v-turbo': {
     name: 'wanx2.1-t2v-turbo',
     displayName: 'WanX2.1 T2V Turbo',
-    defaultResolution: '1280×720',
+    defaultResolution: '1280*720',
     availableQualities: [480, 720],
     availableDurations: [5],
     defaultDuration: 5,
@@ -58,7 +58,7 @@ export const modelConfig = {
   'wanx2.1-t2v-plus': {
     name: 'wanx2.1-t2v-plus',
     displayName: 'WanX2.1 T2V Plus',
-    defaultResolution: '1280×720',
+    defaultResolution: '1280*720',
     availableQualities: [720],
     availableDurations: [5],
     defaultDuration: 5,
@@ -69,22 +69,22 @@ export const modelConfig = {
 // 480P档位分辨率配置
 export const resolution480P = [
   {
-    label: '832×480 (16:9)',
-    value: '832×480',
+    label: '832*480 (16:9)',
+    value: '832*480',
     width: 832,
     height: 480,
     aspectRatio: '16:9',
   },
   {
-    label: '480×832 (9:16)',
-    value: '480×832',
+    label: '480*832 (9:16)',
+    value: '480*832',
     width: 480,
     height: 832,
     aspectRatio: '9:16',
   },
   {
-    label: '624×624 (1:1)',
-    value: '624×624',
+    label: '624*624 (1:1)',
+    value: '624*624',
     width: 624,
     height: 624,
     aspectRatio: '1:1',
@@ -94,36 +94,36 @@ export const resolution480P = [
 // 720P档位分辨率配置
 export const resolution720P = [
   {
-    label: '1280×720 (16:9)',
-    value: '1280×720',
+    label: '1280*720 (16:9)',
+    value: '1280*720',
     width: 1280,
     height: 720,
     aspectRatio: '16:9',
   },
   {
-    label: '720×1280 (9:16)',
-    value: '720×1280',
+    label: '720*1280 (9:16)',
+    value: '720*1280',
     width: 720,
     height: 1280,
     aspectRatio: '9:16',
   },
   {
-    label: '960×960 (1:1)',
-    value: '960×960',
+    label: '960*960 (1:1)',
+    value: '960*960',
     width: 960,
     height: 960,
     aspectRatio: '1:1',
   },
   {
-    label: '1088×832 (4:3)',
-    value: '1088×832',
+    label: '1088*832 (4:3)',
+    value: '1088*832',
     width: 1088,
     height: 832,
     aspectRatio: '4:3',
   },
   {
-    label: '832×1088 (3:4)',
-    value: '832×1088',
+    label: '832*1088 (3:4)',
+    value: '832*1088',
     width: 832,
     height: 1088,
     aspectRatio: '3:4',
@@ -133,36 +133,36 @@ export const resolution720P = [
 // 1080P档位分辨率配置
 export const resolution1080P = [
   {
-    label: '1920×1080 (16:9)',
-    value: '1920×1080',
+    label: '1920*1080 (16:9)',
+    value: '1920*1080',
     width: 1920,
     height: 1080,
     aspectRatio: '16:9',
   },
   {
-    label: '1080×1920 (9:16)',
-    value: '1080×1920',
+    label: '1080*1920 (9:16)',
+    value: '1080*1920',
     width: 1080,
     height: 1920,
     aspectRatio: '9:16',
   },
   {
-    label: '1440×1440 (1:1)',
-    value: '1440×1440',
+    label: '1440*1440 (1:1)',
+    value: '1440*1440',
     width: 1440,
     height: 1440,
     aspectRatio: '1:1',
   },
   {
-    label: '1632×1248 (4:3)',
-    value: '1632×1248',
+    label: '1632*1248 (4:3)',
+    value: '1632*1248',
     width: 1632,
     height: 1248,
     aspectRatio: '4:3',
   },
   {
-    label: '1248×1632 (3:4)',
-    value: '1248×1632',
+    label: '1248*1632 (3:4)',
+    value: '1248*1632',
     width: 1248,
     height: 1632,
     aspectRatio: '3:4',
@@ -234,7 +234,7 @@ export const getResolutionsByModelAndQuality = (model: string, quality: number) 
 
 // 根据模型获取默认分辨率
 export const getDefaultResolutionByModel = (model: string) => {
-  return modelConfig[model as keyof typeof modelConfig]?.defaultResolution || '1920×1080';
+  return modelConfig[model as keyof typeof modelConfig]?.defaultResolution || '1920*1080';
 };
 
 // 根据模型和质量获取第一个可用分辨率（用于默认值）

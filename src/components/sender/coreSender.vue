@@ -33,6 +33,17 @@ const {
   autoSize?: { minRows: number; maxRows: number };
 }>();
 const senderValue = ref(modelValue);
+
+const setSenderValue = (value: string) => {
+  senderValue.value = value;
+};
+
+watch(
+  () => senderValue.value,
+  (newVal) => {
+    emit('update:modelValue', newVal);
+  },
+);
 const slots = useSlots();
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void;
@@ -58,6 +69,7 @@ const openHeader = () => {
 defineExpose({
   closeHeader,
   openHeader,
+  setSenderValue,
 });
 </script>
 
