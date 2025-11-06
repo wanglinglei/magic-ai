@@ -7,14 +7,15 @@
       <div class="w-500px">
         <CoreSender ref="coreSenderRef" class="mb-24px" v-model="senderValue">
           <template #prefix>
-            <button
-              class="ai-prompt-button flex items-center gap-8px px-16px py-8px rounded-8px text-14px font-medium transition-all hover:opacity-90"
+            <CommonButton
+              text="AI提示词"
               @click="handleAiPrompt"
               :disabled="senderValue.length === 0"
             >
-              <MagicIcon />
-              <span>AI提示词</span>
-            </button>
+              <template #icon>
+                <MagicIcon />
+              </template>
+            </CommonButton>
           </template>
         </CoreSender>
         <div class="w-180px mb-16px">
@@ -54,12 +55,7 @@
           v-model="selectedDuration"
         />
 
-        <button
-          class="ai-prompt-button flex items-center justify-center gap-8px px-16px py-8px rounded-8px text-14px font-medium transition-all hover:opacity-90 mt-24px"
-          @click="handleStartGenerate"
-        >
-          <span>开始生成</span>
-        </button>
+        <CommonButton text="开始生成" @click="handleStartGenerate" />
       </div>
       <div class="flex-1 flex-center border-left ml-24px">
         <div
@@ -80,7 +76,7 @@
 
 <script setup lang="ts">
 import { CoreSender } from '@/components/sender';
-import { RadioTag, Select } from '@/components/userAction';
+import { RadioTag, Select, CommonButton } from '@/components/userAction';
 import { MagicIcon } from '@/assets/svg';
 import { Header } from '@/components/page';
 import {
@@ -234,24 +230,6 @@ const handleStartGenerate = async () => {
 </script>
 
 <style scoped>
-.ai-prompt-button {
-  background-color: #f3e8ff;
-  color: #9333ea;
-  border: 2px solid #a855f7;
-  outline: none;
-  cursor: pointer;
-}
-
-.ai-prompt-button:hover {
-  background-color: #e9d5ff;
-  border-color: #9333ea;
-}
-
-.ai-prompt-button:active {
-  background-color: #ddd6fe;
-  border-color: #7e22ce;
-}
-
 .border-left {
   border-left: 1px solid #e0e0e0;
 }

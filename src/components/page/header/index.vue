@@ -22,7 +22,7 @@
         </el-dropdown>
       </div>
       <div v-else class="flex gap-2">
-        <el-button type="primary" @click="handleLogin">登录</el-button>
+        <CommonButton text="登录" @click="handleLogin" />
       </div>
     </div>
   </div>
@@ -31,6 +31,7 @@
 <script setup lang="ts">
 import Logo from '../logo/index.vue';
 import { useUserStore } from '@/stores';
+import { CommonButton } from '@/components/userAction';
 const userStore = useUserStore();
 const userInfo = computed(() => userStore.userInfo);
 const isLogin = computed(() => userStore.isLogin);
