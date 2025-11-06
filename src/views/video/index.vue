@@ -96,7 +96,12 @@ import {
   fpsConfig,
 } from './modelConfig/glmToVideo';
 import { systemPrompt } from './modelConfig/constants';
-import { ChatService, VideoService, type GenerateVideoRequest } from '@/services';
+import {
+  ChatService,
+  VideoService,
+  type TyGenerateVideoRequest,
+  type GlmGenerateVideoRequest,
+} from '@/services';
 import { modelProvider } from '@/constants/model';
 defineOptions({
   name: 'VideoPage',
@@ -220,7 +225,7 @@ const generateParams = () => {
  * @return {*}
  */
 const handleStartGenerate = async () => {
-  const params: GenerateVideoRequest = generateParams();
+  const params: TyGenerateVideoRequest | GlmGenerateVideoRequest = generateParams();
   const response = await VideoService.generateVideo(params);
   if (response.success) {
     resultVideoUrl.value = response.data.videoUrl;

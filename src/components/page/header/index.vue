@@ -29,30 +29,10 @@
 </template>
 
 <script setup lang="ts">
-import logoPng from '@/assets/images/logo/logo1.png';
 import Logo from '../logo/index.vue';
-import { ElButton } from 'element-plus';
-import { User, UserFilled } from '@element-plus/icons';
 import { useUserStore } from '@/stores';
 const userStore = useUserStore();
-const user = computed(() => userStore.user);
-
-const APP_INFO = {
-  name: import.meta.env.VITE_APP_NAME,
-  description: import.meta.env.VITE_APP_DESCRIPTION,
-};
-
-const handleLogin = () => {
-  userStore.setUser({
-    id: '1',
-    name: '汪汪',
-    // avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
-  });
-};
-
-const handleLogout = () => {
-  userStore.setUser(null);
-};
+const userInfo = computed(() => userStore.userInfo);
 </script>
 
 <style lang="less" scoped></style>
