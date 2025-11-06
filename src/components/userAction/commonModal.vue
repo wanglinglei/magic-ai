@@ -9,7 +9,7 @@
       </div>
     </template>
     <slot></slot>
-    <template #footer>
+    <template #footer v-if="showFooter">
       <div class="dialog-footer">
         <el-button @click="closeModal"> {{ cancelText }} </el-button>
         <el-button type="primary" @click="handleConfirm"> {{ confirmText }} </el-button>
@@ -25,11 +25,13 @@ const {
   visible = false,
   confirmText = '确认',
   cancelText = '取消',
+  showFooter = true,
 } = defineProps<{
   title?: string;
   visible: boolean;
   confirmText?: string;
   cancelText?: string;
+  showFooter?: boolean;
 }>();
 
 const slots = useSlots();

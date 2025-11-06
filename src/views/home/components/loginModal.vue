@@ -2,6 +2,7 @@
   <CommonModal
     title="用户登录"
     :visible="visible"
+    :show-footer="false"
     @confirm="handleSubmit"
     @update:visible="handleClose"
   >
@@ -48,13 +49,22 @@
           </div>
         </div>
       </el-form-item>
-
+      <div class="flex justify-center">
+        <CommonButton text="立即登录" @click="handleSubmit" :width="'300px'" />
+      </div>
       <!-- 底部链接 -->
-      <div class="form-footer p-x-40px">
-        <el-link type="primary" :underline="false" @click="handleForgotPassword">
+      <div class="form-footer p-x-40px theme-purple">
+        <el-link
+          type="primary"
+          class="theme-purple"
+          :underline="false"
+          @click="handleForgotPassword"
+        >
           忘记密码？
         </el-link>
-        <el-link type="primary" :underline="false" @click="handleGoRegister"> 注册账号 </el-link>
+        <el-link type="primary" class="theme-purple" :underline="false" @click="handleGoRegister">
+          注册账号
+        </el-link>
       </div>
 
       <!-- 第三方登录 -->
@@ -89,7 +99,7 @@
 </template>
 
 <script setup lang="ts">
-import { CommonModal } from '@/components/userAction';
+import { CommonModal, CommonButton } from '@/components/userAction';
 import { UserService } from '@/services/user';
 import type { LoginByUsernameRequest } from '@/services/user/types';
 import type { FormInstance, FormRules } from 'element-plus';
