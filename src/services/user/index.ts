@@ -3,7 +3,7 @@
  * @Date: 2025-11-06 11:20:51
  * @Description: 用户服务
  * @FilePath: /magicAI/src/services/user/index.ts
- * @LastEditTime: 2025-11-06 11:31:01
+ * @LastEditTime: 2025-11-06 14:07:09
  */
 import { request } from '@/services/http';
 import type { LoginByUsernameRequest, LoginUserResponse, User, RegisterRequest } from './types';
@@ -40,7 +40,7 @@ export class UserService {
    */
   public static async loginByAlipay(authCode: string) {
     return request<LoginUserResponse>({
-      url: '/user/loginByAlipay',
+      url: '/alipay-auth/login',
       method: 'POST',
       data: { authCode },
     });
