@@ -1,3 +1,4 @@
 import RadioTag from './radioTag.vue';
 import Select from './select.vue';
-export { RadioTag, Select };
+import CommonModal from './commonModal.vue';
+export { RadioTag, Select, CommonModal };

@@ -1,7 +1,7 @@
 interface RequestOptions {
   url: string;
   method: string;
-  data?: any;
+  data?: unknown;
   headers?: Record<string, string>;
 }
 
@@ -12,9 +12,11 @@ export interface Response<T> {
   code: number;
 }
 
+import { useUserStore } from '@/stores';
+
 const BASE_URL = import.meta.env.VITE_API_URL;
 export async function request<T>(options: RequestOptions): Promise<Response<T>> {
-  const { url, method, data, headers } = options;
+  const { url, method, data, headers = {} } = options;
 
   // 判断 data 是否为 FormData，如果是则直接使用，否则 JSON 序列化
   const isFormData = data instanceof FormData;
@@ -28,10 +30,15 @@ export async function request<T>(options: RequestOptions): Promise<Response<T>> 
         ...headers,
       };
 
+  const accessToken = useUserStore().accessToken;
+  if (accessToken) {
+    requestHeaders['Authorization'] = accessToken;
+  }
   const response = await fetch(`${BASE_URL}${url}`, {
     method,
     body,
     headers: requestHeaders,
+    credentials: 'include', // 携带 cookie 和其他凭证信息
   });
 
   if (!response.ok)

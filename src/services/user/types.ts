@@ -6,6 +6,7 @@ export interface RegisterRequest {
   username: string;
   password: string;
   captcha: string;
+  gender?: string; // 性别：male-男，female-女，other-其他
 }
 
 /**
