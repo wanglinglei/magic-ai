@@ -392,6 +392,7 @@ function calcDeltaTime() {
 }
 
 function resizeCanvas() {
+  if (!canvasRef.value) return false;
   const width = scaleByPixelRatio(canvasRef.value.clientWidth);
   const height = scaleByPixelRatio(canvasRef.value.clientHeight);
   if (canvasRef.value.width !== width || canvasRef.value.height !== height) {

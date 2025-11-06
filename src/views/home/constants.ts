@@ -33,7 +33,7 @@ export const HOME_BANNER_LIST = [
     pathName: ROUTER_PATH_NAME.VIDEO,
     labels: [
       { text: '热门', colorClass: 'bg-sky-100 text-sky-700' },
-      { text: '设计', colorClass: 'bg-teal-100 text-teal-700' },
+      { text: '视频', colorClass: 'bg-teal-100 text-teal-700' },
     ],
   },
   {
