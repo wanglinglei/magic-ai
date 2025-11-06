@@ -1,7 +1,7 @@
 interface RequestOptions {
   url: string;
   method: string;
-  data: any;
+  data?: any;
   headers?: Record<string, string>;
 }
 
