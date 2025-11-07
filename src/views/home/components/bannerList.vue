@@ -28,8 +28,16 @@
 import { GradientText } from '@/components/animationComponents';
 import { HOME_BANNER_LIST } from '../constants';
 import type { TRouterPathName } from '@/router/constants';
+import { useUserStore } from '@/stores';
+import { elMessageUtils } from '@/utils/elMessage';
+const userStore = useUserStore();
+const isLogin = computed(() => userStore.isLogin);
 const router = useRouter();
 const handleClick = (pathName: TRouterPathName) => {
+  if (!isLogin.value) {
+    elMessageUtils.warning('请先登录，再使用该功能');
+    return;
+  }
   router.push({
     name: pathName,
   });

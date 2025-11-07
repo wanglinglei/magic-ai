@@ -5,11 +5,13 @@
     <div class="right-user">
       <div v-if="isLogin">
         <el-dropdown>
-          <div v-if="userInfo?.avatar" class="w-32px h-32px rounded-full">
-            <img :src="userInfo.avatar" alt="avatar" class="w-full h-full rounded-full" />
-          </div>
-          <div v-else>
-            <el-icon :size="30"><User /></el-icon>
+          <div class="w-40px h-40px rounded-full">
+            <img
+              :src="userInfo?.avatar || defaultAvatar"
+              alt="avatar"
+              class="w-full h-full rounded-full"
+              @error="avatarError"
+            />
           </div>
           <template #dropdown>
             <el-dropdown-menu>
@@ -32,6 +34,8 @@ import Logo from '../logo/index.vue';
 import { useUserStore } from '@/stores';
 import { CommonButton } from '@/components/userAction';
 import { ROUTER_PATH_NAME } from '@/router/constants';
+const defaultAvatar =
+  'https://p3-passport.byteacctimg.com/img/user-avatar/5a3f65c1808beb286a51c56d7a0903b4~80x80.awebp';
 const userStore = useUserStore();
 const userInfo = computed(() => userStore.userInfo);
 const isLogin = computed(() => userStore.isLogin);
@@ -47,6 +51,11 @@ const handleUserInfo = () => {
   router.push({
     name: ROUTER_PATH_NAME.USER_INFO,
   });
+};
+
+const avatarError = (event: Event) => {
+  const target = event.target as HTMLImageElement;
+  target.src = defaultAvatar;
 };
 </script>
 

@@ -39,12 +39,41 @@ const setStorageItem = <T>(key: string, value: T | null | undefined) => {
   }
 };
 
+/**
+ * @description: 从 sessionStorage 获取数据
+ */
+const getSessionItem = <T>(key: string): T | null => {
+  try {
+    const item = sessionStorage.getItem(key);
+    return item ? JSON.parse(item) : null;
+  } catch (error) {
+    console.error(`Error getting ${key} from sessionStorage:`, error);
+    return null;
+  }
+};
+
+/**
+ * @description: 保存数据到 sessionStorage
+ */
+const setSessionItem = <T>(key: string, value: T | null | undefined) => {
+  try {
+    if (value === null || value === undefined) {
+      sessionStorage.removeItem(key);
+    } else {
+      sessionStorage.setItem(key, JSON.stringify(value));
+    }
+  } catch (error) {
+    console.error(`Error setting ${key} to sessionStorage:`, error);
+  }
+};
+
 const useUserStore = defineStore('user', () => {
-  // 从 localStorage 初始化数据
+  // 从 localStorage 初始化用户数据和 token
   const userInfo = ref<User | null>(getStorageItem<User>(STORAGE_KEYS.USER_INFO));
   const accessToken = ref<string | null>(getStorageItem<string>(STORAGE_KEYS.ACCESS_TOKEN));
+  // 从 sessionStorage 初始化弹窗显示状态（仅当前会话有效）
   const hasShowCompleteModal = ref<boolean>(
-    getStorageItem<boolean>(STORAGE_KEYS.HAS_SHOW_COMPLETE_MODAL) || false,
+    getSessionItem<boolean>(STORAGE_KEYS.HAS_SHOW_COMPLETE_MODAL) || false,
   );
 
   const isLogin = computed(() => {
@@ -69,7 +98,7 @@ const useUserStore = defineStore('user', () => {
 
   const setHasShowCompleteModal = (value: boolean) => {
     hasShowCompleteModal.value = value;
-    setStorageItem(STORAGE_KEYS.HAS_SHOW_COMPLETE_MODAL, value);
+    setSessionItem(STORAGE_KEYS.HAS_SHOW_COMPLETE_MODAL, value);
   };
 
   const setUserInfo = (data: User | null) => {
@@ -91,7 +120,7 @@ const useUserStore = defineStore('user', () => {
     hasShowCompleteModal.value = false;
     localStorage.removeItem(STORAGE_KEYS.USER_INFO);
     localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.HAS_SHOW_COMPLETE_MODAL);
+    sessionStorage.removeItem(STORAGE_KEYS.HAS_SHOW_COMPLETE_MODAL);
     router.push({
       name: ROUTER_PATH_NAME.HOME,
     });
