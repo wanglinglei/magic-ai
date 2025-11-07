@@ -29,6 +29,11 @@ const router = createRouter({
       component: () => import('@/views/docx/index.vue'),
     },
     {
+      path: '/user/userInfo',
+      name: ROUTER_PATH_NAME.USER_INFO,
+      component: () => import('@/views/user/userInfo.vue'),
+    },
+    {
       path: '/test',
       name: ROUTER_PATH_NAME.TEST,
       component: () => import('@/views/test/index.vue'),

@@ -71,7 +71,7 @@
 
 <script setup lang="ts">
 import { CommonModal } from '@/components/userAction';
-import { UserService } from '@/services/user';
+import { UserService, GeneralService } from '@/services';
 import type { RegisterRequest } from '@/services/user/types';
 import type { FormInstance, FormRules } from 'element-plus';
 import { elMessageUtils } from '@/utils/elMessage';
@@ -139,7 +139,7 @@ const rules: FormRules = {
 const getCaptcha = async () => {
   try {
     captchaLoading.value = true;
-    const res = await UserService.getCaptcha();
+    const res = await GeneralService.getCaptcha();
     console.log('res', res);
     if (res.success) {
       // 后端直接返回 base64 格式的图片字符串

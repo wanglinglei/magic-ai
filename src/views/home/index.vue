@@ -29,19 +29,57 @@ import RegisterModal from './components/registerModal.vue';
 import { UserService } from '@/services/user';
 import { useUserStore } from '@/stores';
 import { elMessageUtils } from '@/utils/elMessage';
+import { ElMessageBox } from 'element-plus';
+import { ROUTER_PATH_NAME } from '@/router/constants';
 
 const userStore = useUserStore();
 const route = useRoute();
+const router = useRouter();
 const loginVisible = ref(false);
 const registerVisible = ref(false);
+const hasShowCompleteModal = computed(() => userStore.hasShowCompleteModal);
+const isComplete = computed(() => userStore.isComplete);
+const isLogin = computed(() => userStore.isLogin);
 
 onMounted(() => {
   thirdSourceLogin();
 });
 
+/**
+ * @description: 监听登录状态 如果登录则显示完善信息弹窗
+ * @return {*}
+ */
+watch(
+  () => isLogin.value,
+  () => {
+    if (isLogin.value) {
+      showCompleteModal();
+    }
+  },
+);
+
+const showCompleteModal = () => {
+  // userStore.setShowCompleteModal(true);
+  if (!isComplete.value && !hasShowCompleteModal.value) {
+    ElMessageBox.alert('您好，请先完善您的个人信息，以便我们更好地为您服务。', '温馨提示', {
+      confirmButtonText: '去完善',
+      callback: () => {
+        userStore.setHasShowCompleteModal(true);
+        router.push({
+          name: ROUTER_PATH_NAME.USER_INFO,
+        });
+      },
+    });
+  }
+};
+
+/**
+ * @description: 第三方登录
+ * @return {*}
+ */
 const thirdSourceLogin = async () => {
   const { auth_code } = route.query;
-  if (auth_code) {
+  if (auth_code && !isLogin.value) {
     const res = await UserService.loginByAlipay(auth_code as string);
     if (res.success) {
       const { userInfo } = res.data;
@@ -53,11 +91,6 @@ const thirdSourceLogin = async () => {
 // 处理登录
 const handleLogin = () => {
   loginVisible.value = true;
-};
-
-// 处理注册
-const handleRegister = () => {
-  registerVisible.value = true;
 };
 
 // 从登录框切换到注册框

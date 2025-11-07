@@ -29,6 +29,9 @@ export interface User {
   nickname: string;
   email?: string;
   avatar?: string;
+  province?: string;
+  city?: string;
+  gender?: string; // 性别：male-男，female-女，other-其他
   status: number;
   createTime: string;
   updateTime: string;

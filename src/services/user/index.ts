@@ -3,7 +3,7 @@
  * @Date: 2025-11-06 11:20:51
  * @Description: 用户服务
  * @FilePath: /magicAI/src/services/user/index.ts
- * @LastEditTime: 2025-11-06 17:47:12
+ * @LastEditTime: 2025-11-07 14:06:36
  */
 import { request } from '@/services/http';
 import type { LoginByUsernameRequest, LoginUserResponse, User, RegisterRequest } from './types';
@@ -47,17 +47,6 @@ export class UserService {
   }
 
   /**
-   * @description: 获取图形验证码
-   * @return {*}
-   */
-  public static async getCaptcha() {
-    return request<{ image: string }>({
-      url: '/user/captcha',
-      method: 'GET',
-    });
-  }
-
-  /**
    * @description: 退出登录
    * @return {*}
    */
@@ -74,8 +63,16 @@ export class UserService {
    */
   public static async getUserInfo() {
     return request<User>({
-      url: '/user/info',
+      url: '/user/profile',
       method: 'GET',
+    });
+  }
+
+  public static async updateUserInfo(params: User) {
+    return request<boolean>({
+      url: '/user/update',
+      method: 'POST',
+      data: params,
     });
   }
 }
