@@ -12,6 +12,8 @@ export interface Response<T> {
   code: number;
 }
 
+import { elMessageUtils } from '@/utils/elMessage';
+import { ErrorCode } from './constants';
 import { useUserStore } from '@/stores';
 
 const BASE_URL = import.meta.env.VITE_API_URL;
@@ -30,7 +32,8 @@ export async function request<T>(options: RequestOptions): Promise<Response<T>> 
         ...headers,
       };
 
-  const accessToken = useUserStore().accessToken;
+  const userStore = useUserStore();
+  const accessToken = userStore.accessToken;
   if (accessToken) {
     requestHeaders['Authorization'] = accessToken;
   }
@@ -40,8 +43,14 @@ export async function request<T>(options: RequestOptions): Promise<Response<T>> 
     headers: requestHeaders,
     credentials: 'include', // 携带 cookie 和其他凭证信息
   });
-
-  if (!response.ok)
+  const resData = await response.json();
+  if (!response.ok) {
+    const { message, errorCode } = resData;
+    if (errorCode === ErrorCode.TOKEN_EXPIRED || errorCode === ErrorCode.TOKEN_INVALID) {
+      userStore.logout();
+    }
+    elMessageUtils.error(message);
     throw new Error(`${BASE_URL}${url} request failed with status: ${response.status}`);
-  return response.json() as Promise<Response<T>>;
+  }
+  return resData as Promise<Response<T>>;
 }

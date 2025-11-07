@@ -2,12 +2,55 @@ import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 // import type { User } from './types';
 import type { User } from '@/services/user/types';
+import { ROUTER_PATH_NAME } from '@/router/constants';
+import router from '@/router';
+// LocalStorage 的 key
+const STORAGE_KEYS = {
+  USER_INFO: 'magic_ai_user_info',
+  ACCESS_TOKEN: 'magic_ai_access_token',
+  HAS_SHOW_COMPLETE_MODAL: 'magic_ai_has_show_complete_modal',
+};
+
+/**
+ * @description: 从 localStorage 获取数据
+ */
+const getStorageItem = <T>(key: string): T | null => {
+  try {
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : null;
+  } catch (error) {
+    console.error(`Error getting ${key} from localStorage:`, error);
+    return null;
+  }
+};
+
+/**
+ * @description: 保存数据到 localStorage
+ */
+const setStorageItem = <T>(key: string, value: T | null | undefined) => {
+  try {
+    if (value === null || value === undefined) {
+      localStorage.removeItem(key);
+    } else {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+  } catch (error) {
+    console.error(`Error setting ${key} to localStorage:`, error);
+  }
+};
+
 const useUserStore = defineStore('user', () => {
-  const userInfo = ref<User | null>(null);
-  const accessToken = ref<string | null>(null);
+  // 从 localStorage 初始化数据
+  const userInfo = ref<User | null>(getStorageItem<User>(STORAGE_KEYS.USER_INFO));
+  const accessToken = ref<string | null>(getStorageItem<string>(STORAGE_KEYS.ACCESS_TOKEN));
+  const hasShowCompleteModal = ref<boolean>(
+    getStorageItem<boolean>(STORAGE_KEYS.HAS_SHOW_COMPLETE_MODAL) || false,
+  );
+
   const isLogin = computed(() => {
     return accessToken.value !== null;
   });
+
   /**
    * @description: 是否完善信息
    * @return {*}
@@ -24,18 +67,36 @@ const useUserStore = defineStore('user', () => {
     );
   });
 
-  const hasShowCompleteModal = ref(false);
-
   const setHasShowCompleteModal = (value: boolean) => {
     hasShowCompleteModal.value = value;
+    setStorageItem(STORAGE_KEYS.HAS_SHOW_COMPLETE_MODAL, value);
   };
 
   const setUserInfo = (data: User | null) => {
     userInfo.value = data;
+    setStorageItem(STORAGE_KEYS.USER_INFO, data);
   };
+
   const setAccessToken = (token: string | null) => {
     accessToken.value = token;
+    setStorageItem(STORAGE_KEYS.ACCESS_TOKEN, token);
   };
+
+  /**
+   * @description: 退出登录，清除所有数据
+   */
+  const logout = () => {
+    userInfo.value = null;
+    accessToken.value = null;
+    hasShowCompleteModal.value = false;
+    localStorage.removeItem(STORAGE_KEYS.USER_INFO);
+    localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+    localStorage.removeItem(STORAGE_KEYS.HAS_SHOW_COMPLETE_MODAL);
+    router.push({
+      name: ROUTER_PATH_NAME.HOME,
+    });
+  };
+
   return {
     userInfo,
     setUserInfo,
@@ -45,6 +106,7 @@ const useUserStore = defineStore('user', () => {
     isComplete,
     hasShowCompleteModal,
     setHasShowCompleteModal,
+    logout,
   };
 });
 

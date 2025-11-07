@@ -1,6 +1,7 @@
 <template>
   <button
     class="common-button flex items-center justify-center gap-8px px-16px py-8px rounded-8px text-14px font-medium transition-all hover:opacity-90"
+    :type="type"
     :style="{ width }"
     @click="handleClick"
     :disabled="disabled"
@@ -15,11 +16,13 @@ const {
   text = '',
   disabled = false,
   width = 'auto',
+  type = 'button',
 } = defineProps<{
   text: string;
   disabled?: boolean;
   width?: string;
   height?: string;
+  type?: 'button' | 'submit' | 'reset';
 }>();
 const emits = defineEmits(['click']);
 

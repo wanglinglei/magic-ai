@@ -34,7 +34,7 @@
             :before-upload="beforeAvatarUpload"
           >
             <img v-if="formData.avatar" :src="formData.avatar" class="avatar" />
-            <el-icon class="avatar-uploader-icon"><Plus /></el-icon>
+            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
           </el-upload>
         </el-form-item>
         <el-form-item label="省份" prop="province">

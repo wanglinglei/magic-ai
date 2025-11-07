@@ -1,19 +1,8 @@
 <template>
-  <CommonModal
-    title="用户登录"
-    :visible="visible"
-    :show-footer="false"
-    @confirm="handleSubmit"
-    @update:visible="handleClose"
-  >
+  <CommonModal title="用户登录" :visible="visible" :show-footer="false">
     <el-form ref="formRef" :model="formData" :rules="rules" label-width="100px" class="login-form">
       <el-form-item label="用户名" prop="username">
-        <el-input
-          v-model="formData.username"
-          placeholder="请输入用户名"
-          clearable
-          @keyup.enter="handleSubmit"
-        />
+        <el-input v-model="formData.username" placeholder="请输入用户名" clearable />
       </el-form-item>
 
       <el-form-item label="密码" prop="password">
@@ -23,7 +12,6 @@
           placeholder="请输入密码"
           show-password
           clearable
-          @keyup.enter="handleSubmit"
         />
       </el-form-item>
 
@@ -34,7 +22,6 @@
             placeholder="请输入验证码"
             clearable
             class="captcha-input"
-            @keyup.enter="handleSubmit"
           />
           <div
             class="captcha-image"
@@ -118,8 +105,8 @@ const emits = defineEmits<{
 
 // 表单数据
 const formData = reactive({
-  username: '',
-  password: '',
+  username: 'wangwang',
+  password: 'Wll950611',
   captcha: '',
 });
 
@@ -188,18 +175,14 @@ const handleSubmit = async () => {
 
     // 调用登录接口
     const res = await UserService.loginByUsername(loginData);
-
+    console.log('res', res);
     if (res.success) {
+      const { userInfo, accessToken } = res.data;
+      userStore.setUserInfo(userInfo);
+      userStore.setAccessToken(accessToken);
       elMessageUtils.success('登录成功！');
-      // 保存用户信息到 store
-      if (res.success) {
-        const { userInfo, accessToken } = res.data;
-        userStore.setUserInfo(userInfo);
-        userStore.setAccessToken(accessToken);
-      }
       visible.value = false;
-      // 重置表单
-      resetForm();
+      // 表单会在弹窗关闭时自动重置
     } else {
       elMessageUtils.error(res.message || '登录失败，请重试');
       // 刷新验证码
@@ -214,12 +197,6 @@ const handleSubmit = async () => {
     // 刷新验证码
     refreshCaptcha();
   }
-};
-
-// 关闭弹窗
-const handleClose = () => {
-  visible.value = false;
-  resetForm();
 };
 
 // 重置表单
@@ -242,10 +219,16 @@ const handleGoRegister = () => {
   emits('go-register');
 };
 
-// 监听弹窗显示状态，显示时获取验证码
+// 监听弹窗显示状态
 watch(visible, (newVal) => {
   if (newVal) {
+    // 弹窗打开时获取验证码
     getCaptcha();
+  } else {
+    // 弹窗关闭时重置表单（延迟重置，避免影响关闭动画）
+    setTimeout(() => {
+      resetForm();
+    }, 300);
   }
 });
 

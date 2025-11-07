@@ -51,9 +51,12 @@ onMounted(() => {
  */
 watch(
   () => isLogin.value,
-  () => {
-    if (isLogin.value) {
-      showCompleteModal();
+  (newVal) => {
+    if (newVal) {
+      // 延迟显示完善信息弹窗，让用户先看到登录成功提示
+      setTimeout(() => {
+        showCompleteModal();
+      }, 500);
     }
   },
 );
