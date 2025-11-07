@@ -40,9 +40,9 @@ onMounted(() => {
 });
 
 const thirdSourceLogin = async () => {
-  const { auth_Code } = route.query;
-  if (auth_Code) {
-    const res = await UserService.loginByAlipay(auth_Code as string);
+  const { auth_code } = route.query;
+  if (auth_code) {
+    const res = await UserService.loginByAlipay(auth_code as string);
     if (res.success) {
       const { userInfo } = res.data;
       userStore.setUserInfo(userInfo);
@@ -86,7 +86,7 @@ const handleAlipayAuth = () => {
   // 支付宝授权地址，根据实际情况配置
   const alipayAuthUrl = import.meta.env.VITE_ALIPAY_AUTH_URL;
   if (alipayAuthUrl) {
-    window.open(alipayAuthUrl, '_blank');
+    window.open(alipayAuthUrl, '_self');
   } else {
     elMessageUtils.error('支付宝登录配置错误');
   }
