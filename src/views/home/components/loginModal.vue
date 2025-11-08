@@ -121,7 +121,7 @@ const formRef = ref<FormInstance>();
 const rules: FormRules = {
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 4, max: 20, message: '用户名长度应为4-20个字符', trigger: 'blur' },
+    { min: 4, max: 10, message: '用户名长度应为4-10个字符', trigger: 'blur' },
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },

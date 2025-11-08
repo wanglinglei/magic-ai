@@ -4,7 +4,12 @@
     <div class="center-menu"></div>
     <div class="right-user">
       <div v-if="isLogin">
-        <el-dropdown>
+        <el-dropdown
+          :popper-style="{
+            width: '150px',
+            textAlign: 'center',
+          }"
+        >
           <div class="w-40px h-40px rounded-full">
             <img
               :src="userInfo?.avatar || defaultAvatar"
@@ -14,10 +19,21 @@
             />
           </div>
           <template #dropdown>
-            <el-dropdown-menu>
-              <div class="text-center">{{ userInfo?.nickname }}</div>
-              <div class="text-center" @click="handleUserInfo">用户信息</div>
-              <el-dropdown-item divided @click="handleLogout">退出登录</el-dropdown-item>
+            <el-dropdown-menu
+              :popper-style="{
+                width: '150px',
+                textAlign: 'center',
+              }"
+            >
+              <el-dropdown-item class="text-center">
+                <div class="text-center">{{ userInfo?.nickname }}</div>
+              </el-dropdown-item>
+              <el-dropdown-item divided class="text-center" @click="handleUserInfo"
+                >用户信息</el-dropdown-item
+              >
+              <el-dropdown-item divided class="text-center" @click="handleLogout"
+                >退出登录</el-dropdown-item
+              >
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -59,4 +75,9 @@ const avatarError = (event: Event) => {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+:deep(.el-dropdown-menu__item) {
+  justify-content: center;
+  text-align: center;
+}
+</style>

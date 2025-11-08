@@ -13,7 +13,7 @@
           <el-input
             v-model="formData.username"
             placeholder="请输入用户名"
-            :disabled="!!formData.username"
+            :disabled="usernameDisabled"
           />
         </el-form-item>
         <el-form-item label="昵称" prop="nickname">
@@ -90,10 +90,16 @@ const formData = ref<any>({
   province: '',
   city: '',
 });
+
+const usernameDisabled = ref(true);
 const getUserInfo = async () => {
   const res = await UserService.getUserInfo();
   if (res.success) {
     formData.value = res.data;
+    const { username } = res.data;
+    if (!username) {
+      usernameDisabled.value = false;
+    }
   } else {
     elMessageUtils.error(res.message);
   }
@@ -142,7 +148,15 @@ const handleSubmit = async () => {
 };
 
 const rules = {
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { min: 4, max: 10, message: '用户名长度应为4-10个字符', trigger: 'blur' },
+    {
+      pattern: /^[a-zA-Z0-9_]+$/,
+      message: '用户名只能包含字母、数字和下划线',
+      trigger: 'blur',
+    },
+  ],
   nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
   gender: [{ required: true, message: '请选择性别', trigger: 'blur' }],
   email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],

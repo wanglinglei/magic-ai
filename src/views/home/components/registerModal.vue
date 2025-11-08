@@ -113,7 +113,7 @@ const validateConfirmPassword = (
 const rules: FormRules = {
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 4, max: 20, message: '用户名长度应为4-20个字符', trigger: 'blur' },
+    { min: 4, max: 10, message: '用户名长度应为4-10个字符', trigger: 'blur' },
     {
       pattern: /^[a-zA-Z0-9_]+$/,
       message: '用户名只能包含字母、数字和下划线',
