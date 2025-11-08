@@ -62,8 +62,9 @@ import { CommonButton } from '@/components/userAction';
 import { ElAmap, useCitySearch, lazyAMapApiLoaderInstance } from '@vuemap/vue-amap';
 import { UserService } from '@/services';
 import type { FormInstance } from 'element-plus';
+import type { User } from '@/services/user/types';
 
-const center = ref<number[]>(null);
+const center = ref<number[] | null>(null);
 
 onBeforeMount(() => {
   lazyAMapApiLoaderInstance.then(() => {
@@ -80,7 +81,7 @@ onBeforeMount(() => {
   });
 });
 
-const formData = ref({
+const formData = ref<any>({
   username: '',
   nickname: '',
   gender: 'male',
