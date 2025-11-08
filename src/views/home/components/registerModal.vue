@@ -80,10 +80,10 @@ const visible = defineModel<boolean>({ default: false });
 
 // 表单数据
 const formData = reactive({
-  username: 'wangwang',
-  password: 'Wll950611',
-  confirmPassword: 'Wll950611',
-  gender: 'male',
+  username: '',
+  password: '',
+  confirmPassword: '',
+  gender: '',
   captcha: '',
 });
 

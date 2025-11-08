@@ -105,8 +105,8 @@ const emits = defineEmits<{
 
 // 表单数据
 const formData = reactive({
-  username: 'wangwang',
-  password: 'Wll950611',
+  username: '',
+  password: '',
   captcha: '',
 });
 
