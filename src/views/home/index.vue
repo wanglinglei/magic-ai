@@ -85,8 +85,12 @@ const thirdSourceLogin = async () => {
   if (auth_code && !isLogin.value) {
     const res = await UserService.loginByAlipay(auth_code as string);
     if (res.success) {
-      const { userInfo } = res.data;
+      const { userInfo, accessToken } = res.data;
       userStore.setUserInfo(userInfo);
+      userStore.setAccessToken(accessToken);
+      router.push({
+        name: ROUTER_PATH_NAME.HOME,
+      });
     }
   }
 };
