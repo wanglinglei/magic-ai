@@ -66,11 +66,13 @@ const showCompleteModal = () => {
   if (!isComplete.value && !hasShowCompleteModal.value) {
     ElMessageBox.alert('您好，请先完善您的个人信息，以便我们更好地为您服务。', '温馨提示', {
       confirmButtonText: '去完善',
-      callback: () => {
-        userStore.setHasShowCompleteModal(true);
-        router.push({
-          name: ROUTER_PATH_NAME.USER_INFO,
-        });
+      callback: (action: string) => {
+        if (action === 'confirm') {
+          userStore.setHasShowCompleteModal(true);
+          router.push({
+            name: ROUTER_PATH_NAME.USER_INFO,
+          });
+        }
       },
     });
   }

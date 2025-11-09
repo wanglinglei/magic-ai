@@ -561,6 +561,7 @@ function updatePointerDownData(pointer, id, posX, posY) {
 }
 
 function updatePointerMoveData(pointer, posX, posY, color) {
+  if (!canvasRef.value) return;
   pointer.prevTexcoordX = pointer.texcoordX;
   pointer.prevTexcoordY = pointer.texcoordY;
   pointer.texcoordX = posX / canvasRef.value.width;
