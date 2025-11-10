@@ -4,6 +4,7 @@ export interface CreateImageRequest {
   model?: string;
   size?: string;
   provider?: ModelProvider;
+  n?: number;
 }
 
 export interface CreateImageResponse {

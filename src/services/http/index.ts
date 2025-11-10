@@ -46,7 +46,11 @@ export async function request<T>(options: RequestOptions): Promise<Response<T>> 
   const resData = await response.json();
   if (!response.ok) {
     const { message, errorCode } = resData;
-    if (errorCode === ErrorCode.TOKEN_EXPIRED || errorCode === ErrorCode.TOKEN_INVALID) {
+    if (
+      errorCode === ErrorCode.TOKEN_EXPIRED ||
+      errorCode === ErrorCode.TOKEN_INVALID ||
+      errorCode === ErrorCode.UNAUTHORIZED
+    ) {
       userStore.logout();
     }
     elMessageUtils.error(message);
