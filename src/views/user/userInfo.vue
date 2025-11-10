@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    <div class="w-400px mx-auto py-12">
+    <div class="w-500px mx-auto py-12">
       <el-form
         ref="formRef"
         :model="formData"
@@ -23,7 +23,19 @@
           <el-radio-group v-model="formData.gender" :options="GENDER_OPTIONS" />
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
-          <el-input v-model="formData.email" placeholder="请输入邮箱" />
+          <div class="w-full flex justify-between items-center gap-10px">
+            <el-input v-model="formData.email" placeholder="请输入邮箱" />
+            <CommonButton
+              v-if="isEmailChanged && formData.email"
+              width="160px"
+              :disabled="formData.email?.length === 0"
+              text="发送验证码"
+              @click="handleSendEmailCode"
+            />
+          </div>
+        </el-form-item>
+        <el-form-item v-if="isEmailChanged" label="验证码" prop="emailCode">
+          <el-input v-model="formData.emailCode" placeholder="请输入验证码" />
         </el-form-item>
         <el-form-item label="头像" prop="avatar">
           <el-upload
@@ -60,9 +72,8 @@ import { Plus } from '@element-plus/icons';
 import { elMessageUtils } from '@/utils/elMessage';
 import { CommonButton } from '@/components/userAction';
 import { ElAmap, useCitySearch, lazyAMapApiLoaderInstance } from '@vuemap/vue-amap';
-import { UserService } from '@/services';
+import { UserService, GeneralService } from '@/services';
 import type { FormInstance } from 'element-plus';
-import type { User } from '@/services/user/types';
 
 const center = ref<number[] | null>(null);
 
@@ -89,17 +100,24 @@ const formData = ref<any>({
   avatar: '',
   province: '',
   city: '',
+  emailCode: '',
 });
 
 const usernameDisabled = ref(true);
+const oldEmail = ref('');
+
+const isEmailChanged = computed(() => {
+  return formData.value.email !== oldEmail.value;
+});
 const getUserInfo = async () => {
   const res = await UserService.getUserInfo();
   if (res.success) {
     formData.value = res.data;
-    const { username } = res.data;
+    const { username, email } = res.data;
     if (!username) {
       usernameDisabled.value = false;
     }
+    oldEmail.value = email || '';
   } else {
     elMessageUtils.error(res.message);
   }
@@ -131,6 +149,21 @@ const beforeAvatarUpload = (file: File) => {
   return true;
 };
 
+const handleSendEmailCode = async () => {
+  console.log('formData.value: ', formData.value);
+  // 验证邮箱格式
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const { email } = formData.value;
+  if (!email || !emailRegex.test(email)) {
+    elMessageUtils.error('邮箱格式不正确');
+    return;
+  }
+  const res = await GeneralService.sendEmailCode({ email: formData.value.email });
+  if (res.success) {
+    elMessageUtils.success('发送验证码成功');
+  }
+};
+
 const formRef = ref<FormInstance>();
 const router = useRouter();
 const handleSubmit = async () => {
@@ -159,7 +192,15 @@ const rules = {
   ],
   nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
   gender: [{ required: true, message: '请选择性别', trigger: 'blur' }],
-  email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
+  email: [
+    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    {
+      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      message: '邮箱格式不正确',
+      trigger: 'blur',
+    },
+  ],
+  emailCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
   avatar: [{ required: true, message: '请上传头像', trigger: 'blur' }],
   province: [{ required: true, message: '请选择省份', trigger: 'blur' }],
   city: [{ required: true, message: '请选择城市', trigger: 'blur' }],

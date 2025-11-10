@@ -3,10 +3,16 @@
  * @Date: 2025-11-06 11:20:51
  * @Description: 用户服务
  * @FilePath: /magicAI/src/services/user/index.ts
- * @LastEditTime: 2025-11-07 14:06:36
+ * @LastEditTime: 2025-11-10 16:00:00
  */
 import { request } from '@/services/http';
-import type { LoginByUsernameRequest, LoginUserResponse, User, RegisterRequest } from './types';
+import type {
+  LoginByUsernameRequest,
+  LoginUserResponse,
+  User,
+  RegisterRequest,
+  LoginByEmailRequest,
+} from './types';
 export class UserService {
   /**
    * @description: 用户注册
@@ -28,6 +34,14 @@ export class UserService {
   public static async loginByUsername(params: LoginByUsernameRequest) {
     return request<LoginUserResponse>({
       url: '/user/login',
+      method: 'POST',
+      data: params,
+    });
+  }
+
+  public static async loginByEmail(params: LoginByEmailRequest) {
+    return request<LoginUserResponse>({
+      url: '/user/emailLogin',
       method: 'POST',
       data: params,
     });

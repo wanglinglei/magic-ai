@@ -1,13 +1,28 @@
 <template>
   <CommonModal title="用户登录" :visible="visible" :show-footer="false">
-    <el-form ref="formRef" :model="formData" :rules="rules" label-width="100px" class="login-form">
+    <!-- Tab 切换 -->
+    <el-tabs v-model="activeTab" class="login-tabs" @tab-change="handleTabChange">
+      <el-tab-pane label="账号登录" name="username"></el-tab-pane>
+      <el-tab-pane label="邮箱登录" name="email"></el-tab-pane>
+    </el-tabs>
+
+    <!-- 账号登录表单 -->
+    <el-form
+      v-if="activeTab === 'username'"
+      ref="usernameFormRef"
+      label-width="80px"
+      :label-position="'left'"
+      :model="usernameFormData"
+      :rules="usernameRules"
+      class="login-form"
+    >
       <el-form-item label="用户名" prop="username">
-        <el-input v-model="formData.username" placeholder="请输入用户名" clearable />
+        <el-input v-model="usernameFormData.username" placeholder="请输入用户名" clearable />
       </el-form-item>
 
       <el-form-item label="密码" prop="password">
         <el-input
-          v-model="formData.password"
+          v-model="usernameFormData.password"
           type="password"
           placeholder="请输入密码"
           show-password
@@ -18,7 +33,7 @@
       <el-form-item label="验证码" prop="captcha">
         <div class="captcha-container">
           <el-input
-            v-model="formData.captcha"
+            v-model="usernameFormData.captcha"
             placeholder="请输入验证码"
             clearable
             class="captcha-input"
@@ -37,7 +52,7 @@
         </div>
       </el-form-item>
       <div class="flex justify-center">
-        <CommonButton text="立即登录" @click="handleSubmit" :width="'300px'" />
+        <CommonButton text="立即登录" @click="handleUsernameSubmit" :width="'300px'" />
       </div>
       <!-- 底部链接 -->
       <div class="form-footer p-x-40px theme-purple">
@@ -53,42 +68,93 @@
           注册账号
         </el-link>
       </div>
+    </el-form>
 
-      <!-- 第三方登录 -->
-      <el-divider>第三方登录</el-divider>
-      <div class="third-party-login">
-        <el-tooltip content="支付宝登录" placement="top">
-          <div class="login-icon alipay" @click="handleAlipayLogin">
-            <img src="@/assets/images/home/alipay.png" alt="支付宝登录" class="w-full h-full" />
-          </div>
-        </el-tooltip>
-        <el-tooltip content="即将开放" placement="top">
-          <div class="login-icon wechat disabled">
-            <i class="i-ri-wechat-fill text-24px"></i>
-            <span class="coming-soon">敬请期待</span>
-          </div>
-        </el-tooltip>
-        <el-tooltip content="即将开放" placement="top">
-          <div class="login-icon github disabled">
-            <i class="i-carbon-logo-github text-24px"></i>
-            <span class="coming-soon">敬请期待</span>
-          </div>
-        </el-tooltip>
-        <el-tooltip content="即将开放" placement="top">
-          <div class="login-icon qq disabled">
-            <i class="i-ri-qq-fill text-24px"></i>
-            <span class="coming-soon">敬请期待</span>
-          </div>
-        </el-tooltip>
+    <!-- 邮箱登录表单 -->
+    <el-form
+      v-if="activeTab === 'email'"
+      ref="emailFormRef"
+      label-width="100px"
+      :label-position="'left'"
+      :model="emailFormData"
+      :rules="emailRules"
+      class="login-form"
+    >
+      <el-form-item label="邮箱" prop="email">
+        <el-input v-model="emailFormData.email" placeholder="请输入邮箱地址" clearable />
+      </el-form-item>
+
+      <el-form-item label="邮箱验证码" prop="emailCode">
+        <div class="captcha-container">
+          <el-input
+            v-model="emailFormData.emailCode"
+            placeholder="请输入邮箱验证码"
+            clearable
+            class="captcha-input"
+          />
+          <CommonButton
+            :disabled="emailCodeSending || emailCountdown > 0"
+            :text="emailCodeBtnText"
+            @click="handleSendEmailCode"
+            class="send-code-btn"
+          >
+          </CommonButton>
+        </div>
+      </el-form-item>
+
+      <div class="flex justify-center">
+        <CommonButton text="立即登录" @click="handleEmailSubmit" :width="'300px'" />
+      </div>
+      <!-- 底部链接 -->
+      <div class="form-footer p-x-40px theme-purple">
+        <el-link
+          type="primary"
+          class="theme-purple"
+          :underline="false"
+          @click="handleForgotPassword"
+        >
+          忘记密码？
+        </el-link>
+        <el-link type="primary" class="theme-purple" :underline="false" @click="handleGoRegister">
+          注册账号
+        </el-link>
       </div>
     </el-form>
+
+    <!-- 第三方登录 -->
+    <el-divider>第三方登录</el-divider>
+    <div class="third-party-login">
+      <el-tooltip content="支付宝登录" placement="top">
+        <div class="login-icon alipay" @click="handleAlipayLogin">
+          <img src="@/assets/images/home/alipay.png" alt="支付宝登录" class="w-full h-full" />
+        </div>
+      </el-tooltip>
+      <el-tooltip content="即将开放" placement="top">
+        <div class="login-icon wechat disabled">
+          <i class="i-ri-wechat-fill text-24px"></i>
+          <span class="coming-soon">敬请期待</span>
+        </div>
+      </el-tooltip>
+      <el-tooltip content="即将开放" placement="top">
+        <div class="login-icon github disabled">
+          <i class="i-carbon-logo-github text-24px"></i>
+          <span class="coming-soon">敬请期待</span>
+        </div>
+      </el-tooltip>
+      <el-tooltip content="即将开放" placement="top">
+        <div class="login-icon qq disabled">
+          <i class="i-ri-qq-fill text-24px"></i>
+          <span class="coming-soon">敬请期待</span>
+        </div>
+      </el-tooltip>
+    </div>
   </CommonModal>
 </template>
 
 <script setup lang="ts">
 import { CommonModal, CommonButton } from '@/components/userAction';
 import { UserService, GeneralService } from '@/services';
-import type { LoginByUsernameRequest } from '@/services/user/types';
+import type { LoginByUsernameRequest, LoginByEmailRequest } from '@/services/user/types';
 import type { FormInstance, FormRules } from 'element-plus';
 import { elMessageUtils } from '@/utils/elMessage';
 import { useUserStore } from '@/stores';
@@ -103,22 +169,49 @@ const emits = defineEmits<{
   (e: 'third-party-login', provider: string): void;
 }>();
 
-// 表单数据
-const formData = reactive({
+// Tab 切换
+const activeTab = ref<'username' | 'email'>('username');
+
+// 账号登录表单数据
+const usernameFormData = reactive({
   username: '',
   password: '',
   captcha: '',
+});
+
+// 邮箱登录表单数据
+const emailFormData = reactive({
+  email: '',
+  emailCode: '',
 });
 
 // 验证码相关
 const captchaImage = ref<string>('');
 const captchaLoading = ref<boolean>(false);
 
-// 表单引用
-const formRef = ref<FormInstance>();
+// 邮箱验证码相关
+const emailCodeSending = ref<boolean>(false);
+const emailCountdown = ref<number>(0);
+let countdownTimer: NodeJS.Timeout | null = null;
 
-// 表单验证规则
-const rules: FormRules = {
+// 表单引用
+const usernameFormRef = ref<FormInstance>();
+const emailFormRef = ref<FormInstance>();
+
+// 邮箱验证规则
+const emailValidator = (rule: unknown, value: string, callback: (error?: Error) => void) => {
+  const emailReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!value) {
+    callback(new Error('请输入邮箱地址'));
+  } else if (!emailReg.test(value)) {
+    callback(new Error('请输入正确的邮箱地址'));
+  } else {
+    callback();
+  }
+};
+
+// 账号登录表单验证规则
+const usernameRules: FormRules = {
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
     { min: 4, max: 10, message: '用户名长度应为4-10个字符', trigger: 'blur' },
@@ -132,6 +225,23 @@ const rules: FormRules = {
     { min: 4, max: 6, message: '验证码长度为4-6位', trigger: 'blur' },
   ],
 };
+
+// 邮箱登录表单验证规则
+const emailRules: FormRules = {
+  email: [{ required: true, validator: emailValidator, trigger: 'blur' }],
+  emailCode: [
+    { required: true, message: '请输入邮箱验证码', trigger: 'blur' },
+    { min: 4, max: 6, message: '验证码长度为4-6位', trigger: 'blur' },
+  ],
+};
+
+// 邮箱验证码按钮文字
+const emailCodeBtnText = computed(() => {
+  if (emailCountdown.value > 0) {
+    return `${emailCountdown.value}s`;
+  }
+  return emailCodeSending.value ? '发送中...' : '发送验证码';
+});
 
 // 获取验证码
 const getCaptcha = async () => {
@@ -154,23 +264,74 @@ const getCaptcha = async () => {
 
 // 刷新验证码（点击验证码图片时触发）
 const refreshCaptcha = async () => {
-  formData.captcha = ''; // 清空验证码输入
+  usernameFormData.captcha = ''; // 清空验证码输入
   await getCaptcha();
 };
 
-// 提交表单
-const handleSubmit = async () => {
-  if (!formRef.value) return;
+// Tab 切换处理
+const handleTabChange = () => {
+  // 切换 Tab 时重置所有表单
+  resetUsernameForm();
+  resetEmailForm();
+  // 如果切换到账号登录，获取图形验证码
+  if (activeTab.value === 'username') {
+    getCaptcha();
+  }
+  // 清除邮箱验证码倒计时
+  if (countdownTimer) {
+    clearInterval(countdownTimer);
+    countdownTimer = null;
+    emailCountdown.value = 0;
+  }
+};
+
+// 发送邮箱验证码
+const handleSendEmailCode = async () => {
+  // 先验证邮箱格式
+  try {
+    await emailFormRef.value?.validateField('email');
+  } catch {
+    return;
+  }
+
+  try {
+    emailCodeSending.value = true;
+    const res = await GeneralService.sendEmailCode({ email: emailFormData.email });
+    if (res.success) {
+      elMessageUtils.success('验证码已发送到您的邮箱');
+      // 开始倒计时（60秒）
+      emailCountdown.value = 60;
+      countdownTimer = setInterval(() => {
+        emailCountdown.value--;
+        if (emailCountdown.value <= 0) {
+          clearInterval(countdownTimer!);
+          countdownTimer = null;
+        }
+      }, 1000);
+    } else {
+      elMessageUtils.error(res.message || '发送验证码失败');
+    }
+  } catch (error) {
+    console.error('发送邮箱验证码失败:', error);
+    elMessageUtils.error('发送验证码失败，请重试');
+  } finally {
+    emailCodeSending.value = false;
+  }
+};
+
+// 账号登录提交
+const handleUsernameSubmit = async () => {
+  if (!usernameFormRef.value) return;
 
   try {
     // 验证表单
-    await formRef.value.validate();
+    await usernameFormRef.value.validate();
 
     // 准备登录数据
     const loginData: LoginByUsernameRequest = {
-      username: formData.username,
-      password: formData.password,
-      captcha: formData.captcha,
+      username: usernameFormData.username,
+      password: usernameFormData.password,
+      captcha: usernameFormData.captcha,
     };
 
     // 调用登录接口
@@ -182,7 +343,6 @@ const handleSubmit = async () => {
       userStore.setAccessToken(accessToken);
       elMessageUtils.success('登录成功！');
       visible.value = false;
-      // 表单会在弹窗关闭时自动重置
     } else {
       elMessageUtils.error(res.message || '登录失败，请重试');
       // 刷新验证码
@@ -191,7 +351,6 @@ const handleSubmit = async () => {
   } catch (error: unknown) {
     console.error('登录失败:', error);
     if (error !== false) {
-      // false 表示表单验证失败，不需要提示
       elMessageUtils.error('登录失败，请检查输入信息');
     }
     // 刷新验证码
@@ -199,12 +358,53 @@ const handleSubmit = async () => {
   }
 };
 
-// 重置表单
-const resetForm = () => {
-  formRef.value?.resetFields();
-  formData.username = '';
-  formData.password = '';
-  formData.captcha = '';
+// 邮箱登录提交
+const handleEmailSubmit = async () => {
+  if (!emailFormRef.value) return;
+
+  try {
+    // 验证表单
+    await emailFormRef.value.validate();
+
+    // 准备登录数据
+    const loginData: LoginByEmailRequest = {
+      email: emailFormData.email,
+      emailCode: emailFormData.emailCode,
+    };
+
+    // 调用登录接口
+    const res = await UserService.loginByEmail(loginData);
+    console.log('res', res);
+    if (res.success) {
+      const { userInfo, accessToken } = res.data;
+      userStore.setUserInfo(userInfo);
+      userStore.setAccessToken(accessToken);
+      elMessageUtils.success('登录成功！');
+      visible.value = false;
+    } else {
+      elMessageUtils.error(res.message || '登录失败，请重试');
+    }
+  } catch (error: unknown) {
+    console.error('登录失败:', error);
+    if (error !== false) {
+      elMessageUtils.error('登录失败，请检查输入信息');
+    }
+  }
+};
+
+// 重置账号登录表单
+const resetUsernameForm = () => {
+  usernameFormRef.value?.resetFields();
+  usernameFormData.username = '';
+  usernameFormData.password = '';
+  usernameFormData.captcha = '';
+};
+
+// 重置邮箱登录表单
+const resetEmailForm = () => {
+  emailFormRef.value?.resetFields();
+  emailFormData.email = '';
+  emailFormData.emailCode = '';
 };
 
 // 忘记密码
@@ -222,12 +422,23 @@ const handleGoRegister = () => {
 // 监听弹窗显示状态
 watch(visible, (newVal) => {
   if (newVal) {
-    // 弹窗打开时获取验证码
-    getCaptcha();
+    // 弹窗打开时，如果是账号登录获取验证码
+    if (activeTab.value === 'username') {
+      getCaptcha();
+    }
   } else {
-    // 弹窗关闭时重置表单（延迟重置，避免影响关闭动画）
+    // 弹窗关闭时重置所有表单（延迟重置，避免影响关闭动画）
     setTimeout(() => {
-      resetForm();
+      resetUsernameForm();
+      resetEmailForm();
+      // 清除邮箱验证码倒计时
+      if (countdownTimer) {
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+        emailCountdown.value = 0;
+      }
+      // 重置 tab 为账号登录
+      activeTab.value = 'username';
     }, 300);
   }
 });
@@ -252,6 +463,43 @@ defineExpose({
 </script>
 
 <style scoped lang="less">
+// Tab 样式
+.login-tabs {
+  margin-bottom: 20px;
+
+  :deep(.el-tabs__header) {
+    margin-bottom: 0;
+  }
+
+  :deep(.el-tabs__nav-wrap::after) {
+    height: 1px;
+    background-color: #e4e7ed;
+  }
+
+  :deep(.el-tabs__item) {
+    font-size: 15px;
+    font-weight: 500;
+    color: #606266;
+    padding: 0 30px;
+    height: 44px;
+    line-height: 44px;
+
+    &:hover {
+      color: #409eff;
+    }
+
+    &.is-active {
+      color: #409eff;
+      font-weight: 600;
+    }
+  }
+
+  :deep(.el-tabs__active-bar) {
+    height: 3px;
+    background: linear-gradient(90deg, #409eff 0%, #66b1ff 100%);
+  }
+}
+
 .login-form {
   padding: 10px 0 20px;
 
@@ -314,118 +562,140 @@ defineExpose({
         font-weight: 500;
       }
     }
-  }
 
-  .form-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-    padding: 12px 40px;
-    border-top: 1px solid #f0f0f0;
-
-    :deep(.el-link) {
+    .send-code-btn {
+      min-width: 120px;
+      height: 40px;
       font-size: 14px;
       font-weight: 500;
+      border-radius: 6px;
+      transition: all 0.3s;
 
-      &:hover {
-        opacity: 0.8;
-      }
-    }
-  }
-
-  :deep(.el-divider) {
-    margin: 32px 0 24px;
-
-    .el-divider__text {
-      background-color: #fff;
-      padding: 0 16px;
-      font-size: 13px;
-      color: #909399;
-      font-weight: 500;
-    }
-  }
-
-  .third-party-login {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 32px;
-    padding: 8px 0 16px;
-
-    .login-icon {
-      width: 52px;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      border: 2px solid #e4e7ed;
-      position: relative;
-      background: #fff;
-
-      &:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-      }
-
-      &:active {
+      &:hover:not(:disabled) {
         transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
       }
 
-      i {
-        font-size: 26px;
+      &:active:not(:disabled) {
+        transform: translateY(0);
       }
 
-      &.alipay {
-        color: #1677ff;
-        border-color: #1677ff;
-
-        &:hover {
-          background: linear-gradient(135deg, #e6f4ff 0%, #bae0ff 100%);
-          box-shadow: 0 8px 16px rgba(22, 119, 255, 0.25);
-        }
-      }
-
-      &.wechat {
-        color: #07c160;
-        border-color: #d9d9d9;
-      }
-
-      &.github {
-        color: #24292e;
-        border-color: #d9d9d9;
-      }
-
-      &.qq {
-        color: #12b7f5;
-        border-color: #d9d9d9;
-      }
-
-      &.disabled {
+      &:disabled {
         cursor: not-allowed;
-        opacity: 0.4;
-        filter: grayscale(0.8);
-        border-color: #e4e7ed;
+        opacity: 0.6;
+      }
+    }
+  }
+}
 
-        &:hover {
-          transform: none;
-          box-shadow: none;
-          background: #fff;
-        }
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 12px 40px;
+  border-top: 1px solid #f0f0f0;
 
-        .coming-soon {
-          position: absolute;
-          bottom: -24px;
-          left: 50%;
-          transform: translateX(-50%);
-          font-size: 11px;
-          color: #c0c4cc;
-          white-space: nowrap;
-          font-weight: 500;
-        }
+  :deep(.el-link) {
+    font-size: 14px;
+    font-weight: 500;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+:deep(.el-divider) {
+  margin: 32px 0 24px;
+
+  .el-divider__text {
+    background-color: #fff;
+    padding: 0 16px;
+    font-size: 13px;
+    color: #909399;
+    font-weight: 500;
+  }
+}
+
+.third-party-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  padding: 8px 0 16px;
+
+  .login-icon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid #e4e7ed;
+    position: relative;
+    background: #fff;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    &:active {
+      transform: translateY(-2px);
+    }
+
+    i {
+      font-size: 26px;
+    }
+
+    &.alipay {
+      color: #1677ff;
+
+      &:hover {
+        background: linear-gradient(135deg, #e6f4ff 0%, #bae0ff 100%);
+        box-shadow: 0 8px 16px rgba(22, 119, 255, 0.25);
+      }
+    }
+
+    &.wechat {
+      color: #07c160;
+      border-color: #d9d9d9;
+    }
+
+    &.github {
+      color: #24292e;
+      border-color: #d9d9d9;
+    }
+
+    &.qq {
+      color: #12b7f5;
+      border-color: #d9d9d9;
+    }
+
+    &.disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+      filter: grayscale(0.8);
+      border-color: #e4e7ed;
+
+      &:hover {
+        transform: none;
+        box-shadow: none;
+        background: #fff;
+      }
+
+      .coming-soon {
+        position: absolute;
+        bottom: -24px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 11px;
+        color: #c0c4cc;
+        white-space: nowrap;
+        font-weight: 500;
       }
     }
   }

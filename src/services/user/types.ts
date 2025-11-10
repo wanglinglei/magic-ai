@@ -41,3 +41,8 @@ export interface LoginUserResponse {
   accessToken: string;
   userInfo: User;
 }
+
+export interface LoginByEmailRequest {
+  email: string;
+  emailCode: string;
+}

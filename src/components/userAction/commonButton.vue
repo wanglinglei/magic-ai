@@ -15,7 +15,7 @@
 const {
   text = '',
   disabled = false,
-  width = 'auto',
+  width = 'fit-content',
   type = 'button',
 } = defineProps<{
   text: string;
