@@ -3,7 +3,7 @@
  * @Date: 2025-11-06 11:20:51
  * @Description: 用户服务
  * @FilePath: /magicAI/src/services/user/index.ts
- * @LastEditTime: 2025-11-12 18:03:35
+ * @LastEditTime: 2025-11-12 18:39:51
  */
 import { request } from '@/services/http';
 import type {
@@ -106,7 +106,7 @@ export class UserService {
   public static async getUserList(params: GetUserListRequest) {
     const { page, pageSize } = params;
     return request<GetUserListResponse>({
-      url: `/user/userList?page=${page}&pageSize=${pageSize}`,
+      url: `/user/admin/userList?page=${page}&pageSize=${pageSize}`,
       method: 'GET',
     });
   }
