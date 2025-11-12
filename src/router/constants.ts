@@ -7,6 +7,7 @@ export const ROUTER_PATH_NAME = {
   DIVINATION: 'Divination',
   USER_INFO: 'UserInfo',
   TEST: 'Test',
+  USER_LIST: 'UserList',
 };
 
 export type TRouterPathName = (typeof ROUTER_PATH_NAME)[keyof typeof ROUTER_PATH_NAME];

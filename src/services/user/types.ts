@@ -46,3 +46,15 @@ export interface LoginByEmailRequest {
   email: string;
   emailCode: string;
 }
+
+export interface GetUserListRequest {
+  page: number;
+  pageSize: number;
+}
+
+export interface GetUserListResponse {
+  list: User[];
+  total: number;
+  page: number;
+  pageSize: number;
+}

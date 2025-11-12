@@ -3,7 +3,7 @@
  * @Date: 2025-11-06 11:20:51
  * @Description: 用户服务
  * @FilePath: /magicAI/src/services/user/index.ts
- * @LastEditTime: 2025-11-10 16:00:00
+ * @LastEditTime: 2025-11-12 18:03:35
  */
 import { request } from '@/services/http';
 import type {
@@ -12,6 +12,8 @@ import type {
   User,
   RegisterRequest,
   LoginByEmailRequest,
+  GetUserListRequest,
+  GetUserListResponse,
 } from './types';
 export class UserService {
   /**
@@ -82,11 +84,30 @@ export class UserService {
     });
   }
 
+  /**
+   * @description: 更新用户信息
+   * @param {User} params
+   * @return {*}
+   */
   public static async updateUserInfo(params: User) {
     return request<boolean>({
       url: '/user/update',
       method: 'POST',
       data: params,
+    });
+  }
+
+  /**
+   * @description: 获取用户列表
+   * @param {number} page
+   * @param {number} pageSize
+   * @return {*}
+   */
+  public static async getUserList(params: GetUserListRequest) {
+    const { page, pageSize } = params;
+    return request<GetUserListResponse>({
+      url: `/user/userList?page=${page}&pageSize=${pageSize}`,
+      method: 'GET',
     });
   }
 }
