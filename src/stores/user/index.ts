@@ -4,6 +4,8 @@ import { defineStore } from 'pinia';
 import type { User } from '@/services/user/types';
 import { ROUTER_PATH_NAME } from '@/router/constants';
 import router from '@/router';
+import { UserService } from '@/services';
+
 // LocalStorage 的 key
 const STORAGE_KEYS = {
   USER_INFO: 'magic_ai_user_info',
@@ -70,11 +72,25 @@ const setSessionItem = <T>(key: string, value: T | null | undefined) => {
 const useUserStore = defineStore('user', () => {
   // 从 localStorage 初始化用户数据和 token
   const userInfo = ref<User | null>(getStorageItem<User>(STORAGE_KEYS.USER_INFO));
-  const accessToken = ref<string | null>(getStorageItem<string>(STORAGE_KEYS.ACCESS_TOKEN));
+  const accessToken = ref<string | null>(null);
   // 从 sessionStorage 初始化弹窗显示状态（仅当前会话有效）
   const hasShowCompleteModal = ref<boolean>(
     getSessionItem<boolean>(STORAGE_KEYS.HAS_SHOW_COMPLETE_MODAL) || false,
   );
+
+  onBeforeMount(() => {
+    if (!accessToken.value) {
+      accessToken.value = getStorageItem<string>(STORAGE_KEYS.ACCESS_TOKEN);
+      getUserInfo();
+    }
+  });
+
+  const getUserInfo = async () => {
+    const res = await UserService.getUserInfo();
+    if (res.success) {
+      userInfo.value = res.data;
+    }
+  };
 
   const isLogin = computed(() => {
     return accessToken.value !== null;

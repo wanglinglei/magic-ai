@@ -4,6 +4,7 @@ export const ROUTER_PATH_NAME = {
   IMAGE: 'Image',
   VIDEO: 'Video',
   DOCX: 'Docx',
+  DIVINATION: 'Divination',
   USER_INFO: 'UserInfo',
   TEST: 'Test',
 };

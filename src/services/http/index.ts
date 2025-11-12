@@ -51,10 +51,10 @@ export async function request<T>(options: RequestOptions): Promise<Response<T>> 
       errorCode === ErrorCode.TOKEN_INVALID ||
       errorCode === ErrorCode.UNAUTHORIZED
     ) {
+      elMessageUtils.error(message);
       userStore.logout();
+      return resData as Promise<Response<T>>;
     }
-    elMessageUtils.error(message);
-    throw new Error(`${BASE_URL}${url} request failed with status: ${response.status}`);
   }
   return resData as Promise<Response<T>>;
 }
