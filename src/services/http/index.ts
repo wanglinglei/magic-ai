@@ -44,12 +44,12 @@ export async function request<T>(options: RequestOptions): Promise<Response<T>> 
     credentials: 'include', // 携带 cookie 和其他凭证信息
   });
   const resData = await response.json();
-  if (!response.ok) {
-    const { message, errorCode } = resData;
+  if (!resData.success) {
+    const { message, errCode } = resData;
     if (
-      errorCode === ErrorCode.TOKEN_EXPIRED ||
-      errorCode === ErrorCode.TOKEN_INVALID ||
-      errorCode === ErrorCode.UNAUTHORIZED
+      errCode === ErrorCode.TOKEN_EXPIRED ||
+      errCode === ErrorCode.TOKEN_INVALID ||
+      errCode === ErrorCode.UNAUTHORIZED
     ) {
       elMessageUtils.error(message);
       userStore.logout();
