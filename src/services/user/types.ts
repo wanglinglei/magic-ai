@@ -25,6 +25,7 @@ export interface LoginByUsernameRequest {
  */
 export interface User {
   id: string;
+  authScope: string;
   username: string;
   nickname: string;
   email?: string;

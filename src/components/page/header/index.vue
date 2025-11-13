@@ -31,6 +31,9 @@
               <el-dropdown-item divided class="text-center" @click="handleUserInfo"
                 >用户信息</el-dropdown-item
               >
+              <el-dropdown-item v-if="isAdmin" divided class="text-center" @click="handleUserList"
+                >人员管理</el-dropdown-item
+              >
               <el-dropdown-item divided class="text-center" @click="handleLogout"
                 >退出登录</el-dropdown-item
               >
@@ -55,6 +58,8 @@ const defaultAvatar =
 const userStore = useUserStore();
 const userInfo = computed(() => userStore.userInfo);
 const isLogin = computed(() => userStore.isLogin);
+
+const isAdmin = computed(() => userInfo.value?.authScope?.includes('admin'));
 const emits = defineEmits(['login', 'register']);
 const handleLogin = () => {
   emits('login');
@@ -68,7 +73,11 @@ const handleUserInfo = () => {
     name: ROUTER_PATH_NAME.USER_INFO,
   });
 };
-
+const handleUserList = () => {
+  router.push({
+    name: ROUTER_PATH_NAME.USER_LIST,
+  });
+};
 const avatarError = (event: Event) => {
   const target = event.target as HTMLImageElement;
   target.src = defaultAvatar;
