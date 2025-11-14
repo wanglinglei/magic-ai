@@ -8,7 +8,7 @@ import UnoCSS from 'unocss/vite';
 import AutoImport from 'unplugin-auto-import/vite';
 // https://vite.dev/config/
 export default defineConfig({
-  base: './',
+  base: '/magicai/',
   plugins: [
     vue(),
     vueJsx(),
