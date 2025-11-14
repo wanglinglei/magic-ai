@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { ROUTER_PATH_NAME } from './constants';
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/magicai/'),
   routes: [
     {
       path: '/',
